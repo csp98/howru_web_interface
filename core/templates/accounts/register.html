@@ -1,0 +1,76 @@
+{% extends "layouts/base-fullscreen.html" %}
+
+{% block title %} Login {% endblock %}
+
+{% block content %}
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card mx-4">
+
+            <form action="" method="post" role="form">
+
+                {% csrf_token %}
+
+                <div class="card-body p-4">
+
+                    <div class="text-center">
+
+                        <h2>
+                            HOW-R-U Dashboard
+                        </h2>
+                        <h5>Register</h5>
+                        {% if errors %}
+                        {% for error in errors %}
+                            {{ error }}
+                        {% endfor %}
+                        {% elif success %}
+                        User has been created
+                        {% endif %}
+                    </div>
+
+                    <br/>
+
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend"><span class="input-group-text">
+                    <svg class="c-icon">
+                      <use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-user"></use>
+                    </svg></span></div>
+                        {{ form.username }}
+                    </div>
+
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend"><span class="input-group-text">
+                    <svg class="c-icon">
+                      <use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-lock-locked"></use>
+                    </svg></span></div>
+                        {{ form.password1 }}
+                    </div>
+
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend"><span class="input-group-text">
+                    <svg class="c-icon">
+                      <use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-lock-locked"></use>
+                    </svg></span></div>
+                        {{ form.password2 }}
+                    </div>
+
+                    <br/>
+
+                    <div class="text-center">
+                        <button class="btn btn-primary px-4" name="register" type="submit">Register</button>
+                    </div>
+
+                </div>
+
+            </form>
+
+            <div class="card-footer p-4 text-center">
+                Have an account? <a href={% url 'login' %} >Login</a>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

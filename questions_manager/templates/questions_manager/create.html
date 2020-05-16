@@ -1,0 +1,79 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Questions manager {% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+    <div class="fade-in">
+        <div class="col-md-15">
+            <div class="card">
+                <div class="card-header"><strong>Create a new question</strong></div>
+                <div class="card-body">
+                    <form action="" method="post" role="form">
+                        {% csrf_token %}
+                        {% if form_errors %}
+                        {% for error in form_errors %}
+                        {{ error }}
+                        {% endfor %}
+                        {% elif created %}
+                        <p style="color:green; font-weight:bold; font-size:15pt; text-align: center;">
+                            Question has been successfully created
+                        </p>
+                        {% endif %}
+                        <div class="card-body">
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend"><span class="input-group-text">
+                      <svg class="c-icon">
+                        <use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-short-text"></use>
+                      </svg></span></div>
+                                {{ form.question_text }}
+                            </div>
+
+                            <div class="input-group mb-4">
+                                <div class="input-group-prepend"><span class="input-group-text">
+                      <svg class="c-icon">
+                        <use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-list-numbered"></use>
+                      </svg></span></div>
+                                {{ form.responses }}
+                            </div>
+                            <!--
+                            <div class="input-group mb-4">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">
+                                      <svg class="c-icon">
+                                        <use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-lock-locked"></use>
+                                      </svg>
+                                    </span>
+                                </div>
+                                {{ form.privacy }}
+                            </div>
+                            <div class="input-group mb-4">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">
+                                      <svg class="c-icon">
+                                        <use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-language"></use>
+                                      </svg>
+                                    </span>
+                                </div>
+                                {{ form.language }}
+                            </div>
+-->
+                            <div class="text-center">
+                                <button class="btn btn-sm btn-primary" name="login" type="submit">Submit</button>
+                                <button class="btn btn-sm btn-danger" type="reset"> Reset</button>
+                            </div>
+
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+
+        {% block javascripts %}
+        <!-- Specific Page JS goes HERE  -->
+        {% endblock javascripts %}
+
+        {% endblock content %}
+
