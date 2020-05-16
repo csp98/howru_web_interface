@@ -73,7 +73,7 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 # Get routes from config file
-ROUTES_FILE_PATH = '/etc/web_interface/cfg/routes.json'
+ROUTES_FILE_PATH = '/etc/howru/cfg/routes.json'
 with open(ROUTES_FILE_PATH) as routes_file:
     json_file = json.load(routes_file)
     HOST = json_file['host']
