@@ -10,3 +10,5 @@ python-decouple
 gunicorn
 whitenoise
 ujson
+psycopg2-binary
+Pillow

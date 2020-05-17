@@ -1,27 +1,15 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 
+
 # Create your views here.
+from howru_models.models import Patient
 
-def assign(request):
+@login_required(login_url="/login/")
+def index(request):
+    patients = list()
+    patients.append(Patient(name="name", language="lang", gender="m", username="test"))
     context = {
-        'test_var': 'TEST VARIABLE THAT COMES FROM PYTHON CODE (PATIENTS MANAGER/ASSIGN)',
+        'patients': patients
     }
-    return render(request, 'patients_manager/assign.html', context)
-
-def unassign(request):
-    context = {
-        'test_var': 'TEST VARIABLE THAT COMES FROM PYTHON CODE (PATIENTS MANAGER/UNASSIGN)',
-    }
-    return render(request, 'patients_manager/unassign.html', context)
-
-def view(request):
-    context = {
-        'test_var': 'TEST VARIABLE THAT COMES FROM PYTHON CODE (PATIENTS MANAGER/VIEW)',
-    }
-    return render(request, 'patients_manager/view.html', context)
-
-def assign_questions(request):
-    context = {
-        'test_var': 'TEST VARIABLE THAT COMES FROM PYTHON CODE (PATIENTS MANAGER/ASSIGN QUESTIONS)',
-    }
-    return render(request, 'patients_manager/assign_questions.html', context)
+    return render(request, 'patients_manager/index.html', context)

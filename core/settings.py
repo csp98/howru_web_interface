@@ -24,6 +24,7 @@ ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0']
 # Application definition
 
 INSTALLED_APPS = [
+    'howru_models',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -82,7 +83,7 @@ with open(ROUTES_FILE_PATH) as routes_file:
 DATABASES = {
     'default': {
         'ENGINE': 'djongo',
-        'NAME': 'web_interface',
+        'NAME': 'howru',
         'CLIENT': {
             'host': HOST,
             'port': PORT

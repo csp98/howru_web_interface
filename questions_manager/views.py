@@ -1,10 +1,12 @@
-from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render
 
+from howru_models.models import Question
 # Create your views here.
 from .forms import CreateQuestionForm
-from howru_models.Question import Question
 
 
+@login_required(login_url="/login/")
 def create(request):
     created = False
     if request.method == 'POST':
@@ -15,7 +17,7 @@ def create(request):
             responses = form.cleaned_data.get("responses")
             print(responses)
             question = Question(text=question_text, responses=responses)
-            question.to_db()
+            question.save()
             created = True
     form = CreateQuestionForm()
 
@@ -28,6 +30,7 @@ def create(request):
     return render(request, 'questions_manager/create.html', context)
 
 
+@login_required(login_url="/login/")
 def modify(request):
     context = {
         'test_var': 'TEST VARIABLE THAT COMES FROM PYTHON CODE (QUESTIONS MANAGER/MODIFY)',
@@ -35,6 +38,7 @@ def modify(request):
     return render(request, 'questions_manager/modify.html', context)
 
 
+@login_required(login_url="/login/")
 def delete(request):
     context = {
         'test_var': 'TEST VARIABLE THAT COMES FROM PYTHON CODE (QUESTIONS MANAGER/DELETE)',
@@ -42,6 +46,7 @@ def delete(request):
     return render(request, 'questions_manager/delete.html', context)
 
 
+@login_required(login_url="/login/")
 def view(request):
     context = {
         'test_var': 'TEST VARIABLE THAT COMES FROM PYTHON CODE (QUESTIONS MANAGER/VIEW)',
