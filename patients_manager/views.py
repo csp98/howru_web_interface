@@ -1,3 +1,5 @@
+from base64 import b64encode
+
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 
@@ -9,6 +11,6 @@ from howru_models.models import Patient
 def index(request):
     patients = Patient.objects.all()
     context = {
-        'patients': patients
+        'patients': patients,
     }
     return render(request, 'patients_manager/index.html', context)
