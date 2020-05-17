@@ -1,7 +1,7 @@
-djongo
 asgiref
 autopep8
-django==2.*
+django
+psycopg2
 pycodestyle
 pytz
 sqlparse==0.2.4
@@ -12,3 +12,4 @@ whitenoise
 ujson
 psycopg2-binary
 Pillow
+django_better_admin_arrayfield

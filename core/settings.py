@@ -24,6 +24,7 @@ ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0']
 # Application definition
 
 INSTALLED_APPS = [
+    'django_better_admin_arrayfield',
     'howru_models',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -80,14 +81,14 @@ with open(ROUTES_FILE_PATH) as routes_file:
     HOST = json_file['host']
     PORT = json_file['port']
 
-DATABASES = {
+DATABASES =  {
     'default': {
-        'ENGINE': 'djongo',
-        'NAME': 'howru',
-        'CLIENT': {
-            'host': HOST,
-            'port': PORT
-        }
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'postgres',
+        'USER': 'postgres',
+        'PASSWORD': 'postgres',
+        'HOST': 'db',
+        'PORT': 5432,
     }
 }
 
