@@ -10,70 +10,75 @@
             <div class="card">
                 <div class="card-header"><strong>Create a new question</strong></div>
                 <div class="card-body">
-                    <form action="" method="post" role="form">
+                    {% if form.errors %}
+                    {% for field in form %}
+                    {% for error in field.errors %}
+                    <div class="alert alert-danger">
+                        <strong>{{ error|escape }}</strong>
+                    </div>
+                    {% endfor %}
+                    {% endfor %}
+                    {% for error in form.non_field_errors %}
+                    <div class="alert alert-danger">
+                        <strong>{{ error|escape }}</strong>
+                    </div>
+                    {% endfor %}
+                    {% endif %}
+                    <form action="/questions_manager/create/" class="form-horizontal" enctype="multipart/form-data"
+                          method="post">
                         {% csrf_token %}
-                        {% if form_errors %}
-                        {% for error in form_errors %}
-                        {{ error }}
-                        {% endfor %}
-                        {% elif created %}
-                        <p style="color:green; font-weight:bold; font-size:15pt; text-align: center;">
-                            Question has been successfully created
-                        </p>
-                        {% endif %}
-                        <div class="card-body">
-                            <div class="input-group mb-3">
-                                <div class="input-group-prepend"><span class="input-group-text">
-                      <svg class="c-icon">
-                        <use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-short-text"></use>
-                      </svg></span></div>
-                                {{ form.question_text }}
+                        <div class="form-group row">
+                            <label class="col-md-3 col-form-label" for="text">Question</label>
+                            <div class="col-md-9">
+                                <input class="form-control" id="text" name="text"
+                                       placeholder="How do you feel today?"
+                                       required
+                                       type="text">
                             </div>
-
-                            <div class="input-group mb-4">
-                                <div class="input-group-prepend"><span class="input-group-text">
-                      <svg class="c-icon">
-                        <use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-list-numbered"></use>
-                      </svg></span></div>
-                                {{ form.responses }}
-                            </div>
-                            <!--
-                            <div class="input-group mb-4">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text">
-                                      <svg class="c-icon">
-                                        <use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-lock-locked"></use>
-                                      </svg>
-                                    </span>
-                                </div>
-                                {{ form.privacy }}
-                            </div>
-                            <div class="input-group mb-4">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text">
-                                      <svg class="c-icon">
-                                        <use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-language"></use>
-                                      </svg>
-                                    </span>
-                                </div>
-                                {{ form.language }}
-                            </div>
--->
-                            <div class="text-center">
-                                <button class="btn btn-sm btn-primary" name="login" type="submit">Submit</button>
-                                <button class="btn btn-sm btn-danger" type="reset"> Reset</button>
-                            </div>
-
                         </div>
+                        <div class="form-group row">
+                            <label class="col-md-3 col-form-label" for="responses">Possible responses</label>
+                            <div class="col-md-9">
+                                <textarea class="form-control" id="responses" name="responses"
+                                          placeholder="One per line. For example: &#10;Happy&#10;Bored&#10;Angry&#10;Sleepy"
+                                          required
+                                          rows="9"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-3 col-form-label" for="privacy">Privacy</label>
+                            <div class="col-md-9">
+                                <select required class="form-control" id="privacy" name="privacy" >
+                                    <option value="">Please select</option>
+                                    <option value="Public">Public</option>
+                                    <option value="Private">Private</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-3 col-form-label" for="language">Language</label>
+                            <div class="col-md-9">
+                                <select required class="form-control" id="language" name="language">
+                                    <option value="">Please select</option>
+                                    <option value="GB">English</option>
+                                    <option value="ES">Spanish</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <button class="btn btn-sm btn-primary" name="login" type="submit">Submit</button>
+                            <button class="btn btn-sm btn-danger" type="reset"> Reset</button>
                     </form>
                 </div>
             </div>
         </div>
+    </div>
+</div>
 
 
-        {% block javascripts %}
-        <!-- Specific Page JS goes HERE  -->
-        {% endblock javascripts %}
+{% block javascripts %}
+<!-- Specific Page JS goes HERE  -->
+{% endblock javascripts %}
 
-        {% endblock content %}
+{% endblock content %}
 

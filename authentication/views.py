@@ -28,21 +28,20 @@ def login_view(request):
                 correct_credentials = False
 
     return render(request, "accounts/login.html",
-                  {"form": form, "form_errors": form.errors.values(), 'correct_credentials': correct_credentials})
+                  {"form": form, 'correct_credentials': correct_credentials})
 
 
 def register_user(request):
-    success = False
-
     if request.method == "POST":
         form = SignUpForm(request.POST)
         if form.is_valid():
             form.save()
             username = form.cleaned_data.get("username")
             raw_password = form.cleaned_data.get("password1")
-            authenticate(username=username, password=raw_password)
-            success = True
+            user = authenticate(username=username, password=raw_password)
+            login(request, user)
+            return redirect("/")
     else:
         form = SignUpForm()
 
-    return render(request, "accounts/register.html", {"form": form, "errors": form.errors.values(), 'success': success})
+    return render(request, "accounts/register.html", {"form": form})

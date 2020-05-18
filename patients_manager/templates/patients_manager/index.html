@@ -17,15 +17,15 @@
                         <th style="text-align: center; vertical-align: middle;">Name</th>
                         <th style="text-align: center; vertical-align: middle;">Username</th>
                         <th style="text-align: center; vertical-align: middle;">Gender</th>
-                        <th style="text-align: center; vertical-align: middle;"></th>
+                        <th style="text-align: center; vertical-align: middle;">Actions</th>
                     </tr>
                     </thead>
                     <tbody>
                     {% for patient in patients %}
                     <tr>
                         <td style="text-align: center; vertical-align: middle;">
-                            <img width="50" height="60" style="border-radius: 50%;"
-                                 src="data:image/png;base64,{{ patient.picture}}">
+                            <img height="60" src="data:image/png;base64,{{ patient.picture}}" style="border-radius: 50%;"
+                                 width="50">
                         </td>
                         <td style="text-align: center; vertical-align: middle;">
                             {{ patient.name }}
@@ -34,10 +34,24 @@
                             {{ patient.username }}
                         </td>
                         <td style="text-align: center; vertical-align: middle;">
-                            {{ patient.gender }}
+                            {{ patient.get__gender_display }}
                         </td>
                         <td style="text-align: center; vertical-align: middle;">
-                            <button class="btn btn-pill btn-primary" type="button">Assign questions</button>
+                            <div class="btn-group">
+                                <button aria-expanded="false" aria-haspopup="true" class="btn btn-primary dropdown-toggle"
+                                        data-toggle="dropdown" type="button">Select ...
+                                </button>
+                                <div class="dropdown-menu" style="position: absolute; transform: translate3d(0px, 34px, 0px); top: 0px; left: 0px; will-change: transform;"
+                                     x-placement="bottom-start">
+                                    <a class="dropdown-item" href="#">
+                                        Assign questions
+                                    </a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="#">
+                                        Delete patient
+                                    </a>
+                                </div>
+                            </div>
                         </td>
                     </tr>
                     {% endfor %}

@@ -26,7 +26,9 @@
                             {{ error }}
                             {% endfor %}
                             {% elif not correct_credentials %}
-                            <p style="color:red; font-weight:bold; font-size:15pt;">Invalid credentials</p>
+                            <div class="alert alert-danger">
+                                <strong>Invalid credentials</strong>
+                            </div>
                             {% endif %}
                         </div>
                         <br/>

@@ -3,11 +3,36 @@
 {% block title %} Questions manager {% endblock %}
 
 {% block content %}
-<h1>QUESTIONS MANAGER DELETE PAGE</h1>
-{{test_var}}
-<h2>selector de preguntas (al seleccionar se pide confirmar)</h2>
-{% endblock content %}
+
+<div class="container-fluid">
+    <div class="fade-in">
+        <div class="col-md-15">
+            <div class="card">
+                <div class="card-header"><strong>Delete a question</strong></div>
+                <div class="card-body">
+                    Are you sure you want to delete the question?
+                    <form action="{{request.path}}" class="form-horizontal"
+                          enctype="multipart/form-data"
+                          method="post">
+                        {% csrf_token %}
+
+                        <div class="text-center">
+                            <button class="btn btn-sm btn-primary" name="login" type="submit">Confirm</button>
+                            <a href="/questions_manager/">
+                                <button class="btn btn-sm btn-danger" type="button"> Back</button>
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 {% block javascripts %}
 <!-- Specific Page JS goes HERE  -->
 {% endblock javascripts %}
+
+{% endblock content %}
+

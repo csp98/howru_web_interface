@@ -1,54 +1,57 @@
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 from howru_models.models import Question
 # Create your views here.
-from .forms import CreateQuestionForm
+from .forms import CreateQuestionForm, QuestionForm
 
 
 @login_required(login_url="/login/")
 def create(request):
-    created = False
     if request.method == 'POST':
         # Create a form instance and populate it with data from the request (binding):
         form = CreateQuestionForm(request.POST)
         if form.is_valid():
-            question_text = form.cleaned_data.get("question_text")
-            responses = form.cleaned_data.get("responses")
-            print(responses)
-            question = Question(text=question_text, responses=responses)
+            question = Question(text=form.cleaned_data.get("text"),
+                                responses=form.cleaned_data.get("responses"),
+                                public=form.cleaned_data.get("public"),
+                                creator_id=request.user,
+                                language=form.cleaned_data.get("language"))
             question.save()
-            created = True
-    form = CreateQuestionForm()
-
+            return index(request, new_context={"success_msg": "Question has been successfully created"})
+    else:
+        form = CreateQuestionForm()
     context = {
         'form': form,
-        "form_errors": form.errors.values(),
-        "created": created
     }
-
     return render(request, 'questions_manager/create.html', context)
 
 
 @login_required(login_url="/login/")
-def modify(request):
+def index(request, new_context={}):
+    questions = Question.objects.all()
     context = {
-        'test_var': 'TEST VARIABLE THAT COMES FROM PYTHON CODE (QUESTIONS MANAGER/MODIFY)',
+        'questions': questions,
     }
-    return render(request, 'questions_manager/modify.html', context)
+    context.update(new_context)
+    return render(request, 'questions_manager/index.html', context)
 
 
-@login_required(login_url="/login/")
-def delete(request):
-    context = {
-        'test_var': 'TEST VARIABLE THAT COMES FROM PYTHON CODE (QUESTIONS MANAGER/DELETE)',
-    }
-    return render(request, 'questions_manager/delete.html', context)
+def delete(request, question_id):
+    if request.method == "POST":
+        Question.objects.get(id=question_id).delete()
+        return index(request, new_context={"success_msg": "Question has been successfully deleted"})
+    return render(request, 'questions_manager/delete.html')
 
 
-@login_required(login_url="/login/")
-def view(request):
-    context = {
-        'test_var': 'TEST VARIABLE THAT COMES FROM PYTHON CODE (QUESTIONS MANAGER/VIEW)',
-    }
-    return render(request, 'questions_manager/view.html', context)
+
+def modify(request, question_id):
+    if request.method == "POST":
+        form = QuestionForm(request.POST, instance=Question.objects.get(id=question_id))
+        print("poooost")
+        if form.is_valid():
+            form.save()
+            return index(request, new_context={"success_msg": "Question has been successfully modified"})
+    else:
+        form = QuestionForm(instance=Question.objects.get(id=question_id))
+    return render(request, 'questions_manager/modify.html', context={"form": form})

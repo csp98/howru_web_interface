@@ -3,11 +3,94 @@
 {% block title %} Questions manager {% endblock %}
 
 {% block content %}
-<h1>QUESTIONS MANAGER MODIFY PAGE</h1>
-{{test_var}}
-<h2>Selector de preguntas (al seleccionar se abre un form)</h2>
-{% endblock content %}
+
+<div class="container-fluid">
+    <div class="fade-in">
+        <div class="col-md-15">
+            <div class="card">
+                <div class="card-header"><strong>Modify a question</strong></div>
+                <div class="card-body">
+                    {% if form.errors %}
+                    {% for field in form %}
+                    {% for error in field.errors %}
+                    <div class="alert alert-danger">
+                        <strong>{{ field.name }} {{  error }}</strong>
+                    </div>
+                    {% endfor %}
+                    {% endfor %}
+                    {% for error in form.non_field_errors %}
+                    <div class="alert alert-danger">
+                        <strong>{{ error|escape }}</strong>
+                    </div>
+                    {% endfor %}
+                    {% elif modified %}
+                    <div class="alert alert-success">
+                        <strong>Question has been successfully updated</strong>
+                    </div>
+                    {% endif %}
+                    <form action="/questions_manager/modify/{{form.instance.id}}/" class="form-horizontal"
+                          enctype="multipart/form-data"
+                          method="post">
+                        {% csrf_token %}
+                        <div class="form-group row">
+                            <label class="col-md-3 col-form-label" for="text">Question</label>
+                            <div class="col-md-9">
+                                <input class="form-control" id="text" name="text"
+                                       required
+                                       type="text"
+                                       value="{{form.instance.text}}">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-3 col-form-label" for="responses">Possible responses</label>
+                            <div class="col-md-9">
+                                <textarea class="form-control" id="responses" name="responses" required rows="9">
+{% for response in form.instance.responses %}{{ response }}&#10;{% endfor %}
+                                </textarea>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-3 col-form-label" for="privacy">Privacy</label>
+                            <div class="col-md-9">
+                                <select class="form-control" id="privacy" name="privacy" required>
+                                    {% if form.instance.public %}
+                                    <option selected value="Public">Public</option>
+                                    <option value="Private">Private</option>
+                                    {% else %}
+                                    <option value="Public">Public</option>
+                                    <option selected value="Private">Private</option>
+                                    {% endif %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-3 col-form-label" for="language">Language</label>
+                            <div class="col-md-9">
+                                <select class="form-control" id="language" name="language" required>
+                                    {% if form.instance.language == "ES" %}
+                                    <option value="GB">English</option>
+                                    <option selected value="ES">Spanish</option>
+                                    {% else %}
+                                    <option selected value="GB">English</option>
+                                    <option value="ES">Spanish</option>
+                                    {% endif %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <button class="btn btn-sm btn-primary" name="login" type="submit">Submit</button>
+                            <button class="btn btn-sm btn-danger" type="reset"> Reset</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 {% block javascripts %}
 <!-- Specific Page JS goes HERE  -->
 {% endblock javascripts %}
+
+{% endblock content %}
+
