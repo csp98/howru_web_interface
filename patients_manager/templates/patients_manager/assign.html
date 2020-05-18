@@ -3,7 +3,7 @@
 
 {% block content %}
 <div class="row">
-    <div class="col-lg-12">
+    <div class="col-lg-5" style="margin: 0 auto;float: none;margin-bottom: 10px;">
         <div class="card">
             {% if not_found %}
             <div class="alert alert-danger">
@@ -17,6 +17,8 @@
                           method="post">
                         {% csrf_token %}
                         <div class="input-group">
+                            <input autocomplete="username" class="form-control" id="username" name="username"
+                                   placeholder="Username" required type="text">
                             <span class="input-group-prepend">
                             <button class="btn btn-primary" type="submit">
                               <svg class="c-icon">
@@ -24,8 +26,6 @@
                               </svg> Add
                             </button>
                             </span>
-                            <input autocomplete="username" class="form-control" id="username" name="username"
-                                   placeholder="Username" required type="text">
                         </div>
                     </form>
                 </div>
