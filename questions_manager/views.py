@@ -36,7 +36,7 @@ def index(request, new_context={}):
     context.update(new_context)
     return render(request, 'questions_manager/index.html', context)
 
-
+@login_required(login_url="/login/")
 def delete(request, question_id):
     if request.method == "POST":
         Question.objects.get(id=question_id).delete()
@@ -44,7 +44,7 @@ def delete(request, question_id):
     return render(request, 'questions_manager/delete.html')
 
 
-
+@login_required(login_url="/login/")
 def modify(request, question_id):
     if request.method == "POST":
         form = QuestionForm(request.POST, instance=Question.objects.get(id=question_id))

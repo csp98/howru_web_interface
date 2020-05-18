@@ -5,6 +5,11 @@
 <div class="row">
     <div class="col-lg-12">
         <div class="card">
+            {% if success_msg %}
+            <div class="alert alert-success">
+                <strong>{{ success_msg }}</strong>
+            </div>
+            {% endif %}
             <div class="card-body">
                 <table class="table table-responsive-sm table-bordered table-striped table-sm">
                     <thead>
@@ -24,7 +29,8 @@
                     {% for patient in patients %}
                     <tr>
                         <td style="text-align: center; vertical-align: middle;">
-                            <img height="60" src="data:image/png;base64,{{ patient.picture}}" style="border-radius: 50%;"
+                            <img height="60" src="data:image/png;base64,{{ patient.picture}}"
+                                 style="border-radius: 50%;"
                                  width="50">
                         </td>
                         <td style="text-align: center; vertical-align: middle;">
@@ -38,10 +44,12 @@
                         </td>
                         <td style="text-align: center; vertical-align: middle;">
                             <div class="btn-group">
-                                <button aria-expanded="false" aria-haspopup="true" class="btn btn-primary dropdown-toggle"
+                                <button aria-expanded="false" aria-haspopup="true"
+                                        class="btn btn-primary dropdown-toggle"
                                         data-toggle="dropdown" type="button">Select ...
                                 </button>
-                                <div class="dropdown-menu" style="position: absolute; transform: translate3d(0px, 34px, 0px); top: 0px; left: 0px; will-change: transform;"
+                                <div class="dropdown-menu"
+                                     style="position: absolute; transform: translate3d(0px, 34px, 0px); top: 0px; left: 0px; will-change: transform;"
                                      x-placement="bottom-start">
                                     <a class="dropdown-item" href="#">
                                         Assign questions
@@ -57,6 +65,11 @@
                     {% endfor %}
                     </tbody>
                 </table>
+                <a href="/patients_manager/assign">
+                    <button class="btn btn-pill btn-block btn-primary" type="button">
+                        Add a new patient
+                    </button>
+                </a>
             </div>
         </div>
     </div>
