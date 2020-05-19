@@ -11,13 +11,13 @@
             </div>
             {% endif %}
             <div class="card-body">
+                {% if questions %}
                 <table class="table table-responsive-sm table-bordered table-striped table-sm">
                     <thead>
                     <tr>
                         <th style="text-align: center; vertical-align: middle;">Question text</th>
                         <th style="text-align: center; vertical-align: middle;">Possible responses</th>
-                        <th style="text-align: center; vertical-align: middle;">Creator</th>
-                        <th style="text-align: center; vertical-align: middle;">Public</th>
+                        <th style="text-align: center; vertical-align: middle;">Privacy</th>
                         <th style="text-align: center; vertical-align: middle;">Language</th>
                         <th style="text-align: center; vertical-align: middle;">Actions</th>
                     </tr>
@@ -32,9 +32,6 @@
                             {% for response in question.responses %}
                             {{response}} <br>
                             {% endfor %}
-                        </td>
-                        <td style="text-align: center; vertical-align: middle;">
-                            {{ question.creator_id.username }}
                         </td>
                         <td style="text-align: center; vertical-align: middle;">
                             {% if question.public %}
@@ -68,6 +65,7 @@
                     {% endfor %}
                     </tbody>
                 </table>
+                {% endif %}
                 <a href="/questions_manager/create">
                     <button class="btn btn-pill btn-block btn-primary" type="button">
                         Create a new question

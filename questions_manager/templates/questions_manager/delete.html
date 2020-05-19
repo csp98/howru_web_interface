@@ -6,20 +6,30 @@
 
 <div class="container-fluid">
     <div class="fade-in">
-        <div class="col-md-15">
+        <div class="col-md-8" style="margin: 0 auto;float: none;margin-bottom: 10px;">
             <div class="card">
-                <div class="card-header"><strong>Delete a question</strong></div>
+                <div class="card-header"><strong>Are you sure you want to delete question '{{ question }}' ?</strong></div>
                 <div class="card-body">
-                    Are you sure you want to delete the question?
                     <form action="{{request.path}}" class="form-horizontal"
                           enctype="multipart/form-data"
                           method="post">
                         {% csrf_token %}
-
+                        <div class="form-group row">
+                            <label class="col-md-5 col-form-label" for="delete_for_others">Delete it for other
+                                doctors?</label>
+                            <div class="col-md-4">
+                                <select class="form-control" id="delete_for_others" name="delete_for_others" required>
+                                    <option value="">Select...</option>
+                                    <option value="Yes">Yes</option>
+                                    <option value="No">No</option>
+                                </select>
+                            </div>
+                        </div>
                         <div class="text-center">
-                            <button class="btn btn-sm btn-primary" name="login" type="submit">Confirm</button>
-                            <a href="/questions_manager/">
-                                <button class="btn btn-sm btn-danger" type="button"> Back</button>
+
+                            <button class="btn btn-sm btn-danger" name="login" type="submit">Confirm</button>
+                            <a href="/questions_manager/my_questions/">
+                                <button class="btn btn-sm btn-primary" type="button"> Back</button>
                             </a>
                         </div>
                     </form>

@@ -49,3 +49,10 @@ class QuestionForm(ModelForm):
         self.cleaned_data['responses'] = response_list
         privacy = cd.get("privacy")
         self.cleaned_data['public'] = privacy == "Public"
+
+class DeleteQuestionForm(forms.Form):
+    delete_for_others = forms.CharField()
+
+    def clean(self):
+        delete_for_others = self.cleaned_data.get('delete_for_others')
+        self.cleaned_data["delete_for_others"] = delete_for_others == "Yes"

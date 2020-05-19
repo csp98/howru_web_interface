@@ -1,0 +1,71 @@
+{% extends "layouts/base.html" %}
+{% block title %} Patients Manager {% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            {% if success_msg %}
+            <div class="alert alert-success">
+                <strong>{{ success_msg }}</strong>
+            </div>
+            {% endif %}
+            <div class="card-body">
+                {% if questions %}
+                <table class="table table-responsive-sm table-bordered table-striped table-sm">
+                    <thead>
+                    <tr>
+                        <th style="text-align: center; vertical-align: middle;">Question text</th>
+                        <th style="text-align: center; vertical-align: middle;">Possible responses</th>
+                        <th style="text-align: center; vertical-align: middle;">Creator</th>
+                        <th style="text-align: center; vertical-align: middle;">Language</th>
+                        <th style="text-align: center; vertical-align: middle;">Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for question in questions %}
+                    <tr>
+                        <td style="text-align: center; vertical-align: middle;">
+                            {{ question.text }}
+                        </td>
+                        <td style="text-align: center; vertical-align: middle;">
+                            {% for response in question.responses %}
+                            {{response}} <br>
+                            {% endfor %}
+                        </td>
+                        <td style="text-align: center; vertical-align: middle;">
+                            {{ question.creator_id.user.username }}
+                            {% if question.creator_id.user.username == request.user.username %}
+                            (You)
+                            {% endif %}
+                        </td>
+                        <td style="text-align: center; vertical-align: middle;">
+                            {{ question.get_language_display }}
+                        </td>
+                        <td style="text-align: center; vertical-align: middle;">
+                            {% if question in request.user.doctor.assigned_questions.all %}
+                            <button class="btn btn-pill btn-primary" disabled="" type="button">
+                                Assign
+                            </button>
+                            {% else %}
+                            <a href="/questions_manager/assign/{{question.id}}">
+                                <button class="btn btn-pill btn-primary" type="button">
+                                    Assign
+                                </button>
+                            </a>
+                            {%endif%}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block javascripts %}
+<!-- Specific Page JS goes HERE  -->
+{% endblock javascripts %}
