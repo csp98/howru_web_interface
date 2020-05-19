@@ -52,7 +52,6 @@
                             {{ question.get_language_display }}
                         </td>
                         <td style="text-align: center; vertical-align: middle;">
-                            <span class="c-switch-slider" data-checked="✓" data-unchecked="✕"></span>
                             {% if not patient|is_question_assigned:question %}
                             <a href="/patients_manager/assign_questions/{{question.id}}/{{patient.identifier}}/">
                                 <button class="btn btn-pill btn-primary" type="button">
