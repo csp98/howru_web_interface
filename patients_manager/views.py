@@ -4,8 +4,8 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 
 # Create your views here.
-from howru_models.models import Patient, Doctor
-from patients_manager.forms import AssignPatientForm
+from howru_models.models import Patient, Doctor, PendingQuestion
+from patients_manager.forms import AssignPatientForm, DeletePatientForm
 
 
 @login_required(login_url="/login/")
@@ -37,3 +37,46 @@ def assign(request):
     else:
         form = AssignPatientForm()
     return render(request, 'patients_manager/assign.html', context={"form": form, "not_found": not_found})
+
+@login_required(login_url="/login/")
+def unassign(request, patient_id):
+    patient = Patient.objects.get(identifier=patient_id)
+    context = {"patient": patient}
+    if request.method == "POST":
+        form = DeletePatientForm(request.POST)
+        if form.is_valid():
+            delete_answered_questions = form.cleaned_data['delete_answered_questions']
+            request.user.doctor.patient_set.remove(patient)
+            for pending_question in patient.pendingquestion_set.all():
+                pending_question.delete()
+            if delete_answered_questions:
+                for answered_question in patient.answeredquestion_set.all():
+                    answered_question.delete()
+            return index(request, new_context= {"success_msg": "Patient has been successfully unassigned"})
+    return render(request, 'patients_manager/unassign.html', context)
+
+@login_required(login_url="/login/")
+def assign_questions(request, patient_id, new_context={}):
+    questions = request.user.doctor.assigned_questions.all()
+    context = {
+        'patient': Patient.objects.get(identifier=patient_id),
+        'questions': questions,
+    }
+    context.update(new_context)
+    return render(request, 'patients_manager/assign_questions.html', context)
+
+@login_required(login_url="/login/")
+def assign_question_to_patient(request, question_id, patient_id):
+    pending_question = PendingQuestion(doctor_id=request.user.doctor,
+                                       question_id_id=question_id,
+                                       patient_id_id=patient_id,
+                                       answering=False)
+    pending_question.save()
+    return assign_questions(request, patient_id, new_context={"success_msg": "Question successfully assigned to patient"})
+
+@login_required(login_url="/login/")
+def unassign_question_to_patient(request, question_id, patient_id):
+    pending_question = PendingQuestion.objects.get(doctor_id=request.user.doctor, question_id_id=question_id,
+                                                   patient_id_id=patient_id)
+    pending_question.delete()
+    return assign_questions(request, patient_id, new_context={"success_msg": "Question successfully unassigned to patient"})

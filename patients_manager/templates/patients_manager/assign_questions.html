@@ -1,4 +1,5 @@
 {% extends "layouts/base.html" %}
+{% load is_question_assigned from is_question_assigned %}
 {% block title %} Patients Manager {% endblock %}
 
 {% block content %}
@@ -51,33 +52,26 @@
                             {{ question.get_language_display }}
                         </td>
                         <td style="text-align: center; vertical-align: middle;">
-                            <div class="btn-group">
-                                <button aria-expanded="false" aria-haspopup="true"
-                                        class="btn btn-primary dropdown-toggle"
-                                        data-toggle="dropdown" type="button">Select ...
+                            <span class="c-switch-slider" data-checked="✓" data-unchecked="✕"></span>
+                            {% if not patient|is_question_assigned:question %}
+                            <a href="/patients_manager/assign_questions/{{question.id}}/{{patient.identifier}}/">
+                                <button class="btn btn-pill btn-primary" type="button">
+                                    Assign
                                 </button>
-                                <div class="dropdown-menu"
-                                     style="position: absolute; transform: translate3d(0px, 34px, 0px); top: 0px; left: 0px; will-change: transform;">
-                                    <a class="dropdown-item" href="/questions_manager/modify/{{question.id}}/">
-                                        Modify
-                                    </a>
-                                    <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="/questions_manager/delete/{{question.id}}/">
-                                        Delete
-                                    </a>
-                                </div>
-                            </div>
+                            </a>
+                            {% else %}
+                            <a href="/patients_manager/unassign_questions/{{question.id}}/{{patient.identifier}}/">
+                                <button class="btn btn-pill btn-danger" type="button">
+                                    Unassign
+                                </button>
+                            </a>
+                            {% endif %}
                         </td>
                     </tr>
                     {% endfor %}
                     </tbody>
                 </table>
                 {% endif %}
-                <a href="/questions_manager/create">
-                    <button class="btn btn-pill btn-block btn-primary" type="button">
-                        Create a new question
-                    </button>
-                </a>
             </div>
         </div>
     </div>
