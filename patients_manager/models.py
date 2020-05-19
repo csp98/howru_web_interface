@@ -2,4 +2,4 @@
 
 # Create your models here.
 
-from howru_models.models import Patient
+from howru_models.models import Patient, Doctor
