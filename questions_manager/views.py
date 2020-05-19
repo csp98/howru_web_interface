@@ -48,8 +48,8 @@ def delete(request, question_id):
 def modify(request, question_id):
     if request.method == "POST":
         form = QuestionForm(request.POST, instance=Question.objects.get(id=question_id))
-        print("poooost")
         if form.is_valid():
+            form.instance.responses = form.cleaned_data.get('responses')
             form.save()
             return index(request, new_context={"success_msg": "Question has been successfully modified"})
     else:

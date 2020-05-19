@@ -20,7 +20,9 @@ class CreateQuestionForm(forms.Form):
         response_list = list()
         for response in clean_responses.split('\n'):
             if response:
-                response_list.append(response)
+                clean_response = response.strip()
+                if clean_response:
+                    response_list.append(response)
         if len(response_list) < 2:
             raise ValidationError("You must specify at least two possible responses")
         privacy = cd.get("privacy")
@@ -29,15 +31,21 @@ class CreateQuestionForm(forms.Form):
 
 class QuestionForm(ModelForm):
     privacy = forms.CharField()
+    responses_field = forms.CharField()
     class Meta:
         model = Question
-        fields = ["text", "responses", "public", "language"]
+        fields = ["text", "public", "language"]
     def clean(self):
         cd = self.cleaned_data
-        print(cd)
-        clean_responses = cd.get("responses")[0].replace('\r', '')
-        if '\n' not in clean_responses:
+        clean_responses = cd.get("responses_field").replace('\r', '')
+        response_list = list()
+        for response in clean_responses.split('\n'):
+            if response:
+                clean_response = response.strip()
+                if clean_response:
+                    response_list.append(response)
+        if len(response_list) < 2:
             raise ValidationError("You must specify at least two possible responses")
+        self.cleaned_data['responses'] = response_list
         privacy = cd.get("privacy")
-        self.cleaned_data['responses'] = clean_responses.split('\n')
         self.cleaned_data['public'] = privacy == "Public"
