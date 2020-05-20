@@ -3,26 +3,22 @@ from django.shortcuts import render, redirect
 from django.db.models import Q
 from .models import Question, Doctor
 # Create your views here.
-from .forms import CreateQuestionForm, QuestionForm, DeleteQuestionForm
+from .forms import QuestionForm
 
 
 @login_required(login_url="/login/")
 def create(request):
     if request.method == 'POST':
         # Create a form instance and populate it with data from the request (binding):
-        form = CreateQuestionForm(request.POST)
+        form = QuestionForm(request.POST)
         if form.is_valid():
-            question = Question(text=form.cleaned_data.get("text"),
-                                responses=form.cleaned_data.get("responses"),
-                                public=form.cleaned_data.get("public"),
-                                creator_id=request.user.doctor,
-                                language=form.cleaned_data.get("language"))
-            question.save()
-            question.doctor_set.add(request.user.doctor)
-            question.save()
+            form.instance.responses = form.cleaned_data.get('responses')
+            form.instance.creator_id = request.user.doctor
+            form.save()
+            request.user.doctor.assigned_questions.add(form.instance)
             return my_questions(request, new_context={"success_msg": "Question has been successfully created"})
     else:
-        form = CreateQuestionForm()
+        form = QuestionForm()
     context = {
         'form': form,
     }
@@ -38,11 +34,12 @@ def my_questions(request, new_context={}):
     context.update(new_context)
     return render(request, 'questions_manager/my_questions.html', context)
 
+
 @login_required(login_url="/login/")
 def public_questions(request, new_context={}):
     doctor = Doctor.objects.get(user=request.user)
     questions = Question.objects.filter(
-       # ~Q(creator_id=doctor) &
+        # ~Q(creator_id=doctor) &
         Q(public=True)
     )
     context = {
@@ -50,6 +47,7 @@ def public_questions(request, new_context={}):
     }
     context.update(new_context)
     return render(request, 'questions_manager/public_questions.html', context)
+
 
 @login_required(login_url="/login/")
 def assign(request, question_id):
@@ -61,18 +59,14 @@ def assign(request, question_id):
     }
     return public_questions(request, context)
 
+
 @login_required(login_url="/login/")
 def delete(request, question_id):
     question = Question.objects.get(id=question_id)
     context = {"question": question}
     if request.method == "POST":
-        form = DeleteQuestionForm(request.POST)
-        if form.is_valid():
-            delete_question = form.cleaned_data['delete_for_others']
-            request.user.doctor.assigned_questions.remove(question)
-            if delete_question:
-                Question.objects.get(id=question_id).delete()
-            return my_questions(request, new_context={"success_msg": "Question has been successfully deleted"})
+        request.user.doctor.assigned_questions.remove(question)
+        return my_questions(request, new_context={"success_msg": "Question has been successfully deleted"})
     return render(request, 'questions_manager/delete.html', context)
 
 

@@ -5,7 +5,7 @@ from django.shortcuts import render
 
 # Create your views here.
 from howru_models.models import Patient, Doctor, PendingQuestion
-from patients_manager.forms import AssignPatientForm, DeletePatientForm
+from patients_manager.forms import AssignPatientForm
 
 
 @login_required(login_url="/login/")
@@ -43,16 +43,8 @@ def unassign(request, patient_id):
     patient = Patient.objects.get(identifier=patient_id)
     context = {"patient": patient}
     if request.method == "POST":
-        form = DeletePatientForm(request.POST)
-        if form.is_valid():
-            delete_answered_questions = form.cleaned_data['delete_answered_questions']
-            request.user.doctor.patient_set.remove(patient)
-            for pending_question in patient.pendingquestion_set.all():
-                pending_question.delete()
-            if delete_answered_questions:
-                for answered_question in patient.answeredquestion_set.all():
-                    answered_question.delete()
-            return index(request, new_context= {"success_msg": "Patient has been successfully unassigned"})
+        request.user.doctor.patient_set.remove(patient)
+        return index(request, new_context= {"success_msg": "Patient has been successfully unassigned"})
     return render(request, 'patients_manager/unassign.html', context)
 
 @login_required(login_url="/login/")
