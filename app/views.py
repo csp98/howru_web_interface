@@ -28,7 +28,7 @@ def get_top_patients(doctor):
     Retrieves the 5 users with most answered questions
     """
     top_patients = (
-        Patient.objects.annotate(num_ans=Count('answeredquestion')).order_by('-num_ans')[:5]
+        doctor.patient_set.annotate(num_ans=Count('answeredquestion')).order_by('-num_ans')[:5]
     )
     result = [
         (patient, patient.num_ans) for patient in top_patients
