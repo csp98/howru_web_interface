@@ -24,6 +24,7 @@
                         </th>
                         <th style="text-align: center; vertical-align: middle;">Name</th>
                         <th style="text-align: center; vertical-align: middle;">Username</th>
+                        <th style="text-align: center; vertical-align: middle;">Language</th>
                         <th style="text-align: center; vertical-align: middle;">Gender</th>
                         <th style="text-align: center; vertical-align: middle;">Last answer</th>
                         <th style="text-align: center; vertical-align: middle;">Actions</th>
@@ -42,6 +43,17 @@
                         </td>
                         <td style="text-align: center; vertical-align: middle;">
                             {{ patient.username }}
+                        </td>
+                        <td style="text-align: center; vertical-align: middle;">
+                            {% if patient.language == "ES" %}
+                            <svg class="c-icon c-icon-xl">
+                                <use xlink:href="/static/assets/vendors/@coreui/icons/svg/flag.svg#cif-es"></use>
+                            </svg>
+                            {% else %}
+                            <svg class="c-icon c-icon-xl">
+                                <use xlink:href="/static/assets/vendors/@coreui/icons/svg/flag.svg#cif-gb"></use>
+                            </svg>
+                            {% endif %}
                         </td>
                         <td style="text-align: center; vertical-align: middle;">
                             {{ patient.get__gender_display }}
