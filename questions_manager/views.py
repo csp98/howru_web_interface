@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.shortcuts import render, redirect
 from django.db.models import Q
 from .models import Question, Doctor
@@ -27,7 +28,15 @@ def create(request):
 
 @login_required(login_url="/login/")
 def my_questions(request, new_context={}):
-    questions = request.user.doctor.assigned_questions.all()
+    all_questions = request.user.doctor.assigned_questions.all()
+    page = request.GET.get('page', 1)
+    paginator = Paginator(all_questions, 10)
+    try:
+        questions = paginator.page(page)
+    except PageNotAnInteger:
+        questions = paginator.page(1)
+    except EmptyPage:
+        questions = paginator.page(paginator.num_pages)
     context = {
         'questions': questions,
     }
@@ -38,10 +47,18 @@ def my_questions(request, new_context={}):
 @login_required(login_url="/login/")
 def public_questions(request, new_context={}):
     doctor = Doctor.objects.get(user=request.user)
-    questions = Question.objects.filter(
+    all_questions = Question.objects.filter(
         # ~Q(creator_id=doctor) &
         Q(public=True)
     )
+    page = request.GET.get('page', 1)
+    paginator = Paginator(all_questions, 10)
+    try:
+        questions = paginator.page(page)
+    except PageNotAnInteger:
+        questions = paginator.page(1)
+    except EmptyPage:
+        questions = paginator.page(paginator.num_pages)
     context = {
         'questions': questions,
     }

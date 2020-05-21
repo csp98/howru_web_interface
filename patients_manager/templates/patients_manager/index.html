@@ -1,4 +1,5 @@
 {% extends "layouts/base.html" %}
+{% load get_latest_answer_time from templatetags %}
 {% block title %} Patients Manager {% endblock %}
 
 {% block content %}
@@ -23,6 +24,7 @@
                         <th style="text-align: center; vertical-align: middle;">Name</th>
                         <th style="text-align: center; vertical-align: middle;">Username</th>
                         <th style="text-align: center; vertical-align: middle;">Gender</th>
+                        <th style="text-align: center; vertical-align: middle;">Last answer</th>
                         <th style="text-align: center; vertical-align: middle;">Actions</th>
                     </tr>
                     </thead>
@@ -42,6 +44,9 @@
                         </td>
                         <td style="text-align: center; vertical-align: middle;">
                             {{ patient.get__gender_display }}
+                        </td>
+                        <td style="text-align: center; vertical-align: middle;">
+                            {{ patient|get_latest_answer_time }}
                         </td>
                         <td style="text-align: center; vertical-align: middle;">
                             <div class="btn-group">
@@ -68,6 +73,29 @@
                     {% endfor %}
                     </tbody>
                 </table>
+                {% if patients.has_other_pages %}
+                <ul class="pagination">
+                    {% if patients.has_previous %}
+                    <li class="page-item"><a class="page-link"
+                                             href="?page={{ patients.previous_page_number }}">Prev</a></li>
+                    {% else %}
+                    <li class="page-item"><a class="page-link disabled">Prev</a></li>
+                    {% endif %}
+                    {% for i in patients.paginator.page_range %}
+                    {% if patients.number == i %}
+                    <li class="page-item active"><a class="page-link" href="#">{{i}}</a></li>
+                    {% else %}
+                    <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+                    {% endif %}
+                    {% endfor %}
+                    {% if patients.has_next %}
+                    <li class="page-item"><a class="page-link" href="?page={{ patients.next_page_number }}">Next</a>
+                    </li>
+                    {% else %}
+                    <li class="page-item"><a class="page-link disabled">Next</a></li>
+                    {% endif %}
+                </ul>
+                {% endif %}
                 {% endif %}
                 <a href="/patients_manager/assign">
                     <button class="btn btn-pill btn-block btn-primary" type="button">

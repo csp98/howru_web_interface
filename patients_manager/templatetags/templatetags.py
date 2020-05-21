@@ -10,3 +10,12 @@ def is_question_assigned(patient, question):
         return True
     except PendingQuestion.DoesNotExist:
         return False
+
+@register.filter
+def get_latest_answer_time(patient):
+    try:
+        result = patient.answeredquestion_set.order_by('-answer_date')[0].answer_date
+        # TODO apply locale
+    except IndexError:
+        result =  "-"
+    return result

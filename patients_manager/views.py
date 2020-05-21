@@ -1,6 +1,7 @@
 from base64 import b64encode
 
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.shortcuts import render
 
 # Create your views here.
@@ -11,7 +12,15 @@ from patients_manager.forms import AssignPatientForm
 @login_required(login_url="/login/")
 def index(request, new_context={}):
     doctor = Doctor.objects.get(user=request.user)
-    patients = doctor.patient_set.all()
+    all_patients = doctor.patient_set.all()
+    page = request.GET.get('page', 1)
+    paginator = Paginator(all_patients, 10)
+    try:
+        patients = paginator.page(page)
+    except PageNotAnInteger:
+        patients = paginator.page(1)
+    except EmptyPage:
+        patients = paginator.page(paginator.num_pages)
     context = {
         'patients': patients,
     }
