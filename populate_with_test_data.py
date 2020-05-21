@@ -15,7 +15,7 @@ doctor = User.objects.get(username='data_populator').doctor
 for i in range(200):
     # Questions
     question = Question(responses=["response 1", "response 2", "response 3", "response 4"],
-                        text=f'This is test question number {i}',
+                        text=f'This is test question number {random.randint(1, 1e4)}',
                         creator_id=doctor,
                         language=random.choice(["ES", "GB"]),
                         public=True)
