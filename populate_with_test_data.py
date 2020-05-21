@@ -7,7 +7,8 @@ import pytz
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "core.settings")
 from howru_models.models import *
 from django.contrib.auth.models import User
-
+AVATARS_PATH = '/opt/web_interface/core/static/assets/img/avatars'
+AVATARS_LIST = [f'{AVATARS_PATH}/{image}' for image in os.listdir(AVATARS_PATH)]
 # Get doctor
 doctor = User.objects.get(username='data_populator').doctor
 # Create question
@@ -28,7 +29,7 @@ for i in range(200):
                       language=random.choice(["ES", "GB"])
                       )
     patient.schedule = "15:00"
-    patient.picture = '/opt/web_interface/core/static/assets/favicon/icon.png'
+    patient.picture = random.choice(AVATARS_LIST)
     patient.save()
     doctor.patient_set.add(patient)
 
