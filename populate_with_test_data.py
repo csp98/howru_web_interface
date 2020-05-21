@@ -1,6 +1,8 @@
 import os
 from datetime import datetime
 
+import pytz
+
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "core.settings")
 from howru_models.models import *
 from django.contrib.auth.models import User
@@ -24,9 +26,9 @@ for i in range(200):
                       _gender="M",
                       username=f'username{i}',
                       language="ES",
-                      _schedule=UTCTime.to_locale(datetime.utcnow()),
                       assigned_doctor=doctor
                       )
+    patient.schedule="15:00"
     patient.picture = '/opt/web_interface/core/static/assets/favicon/icon.png'
     patient.save()
     # Pending questions
@@ -39,7 +41,7 @@ for i in range(200):
     answered = AnsweredQuestion(doctor_id=doctor,
                                 question_id=question,
                                 patient_id=patient,
-                                answer_date=UTCTime.to_locale(datetime.utcnow()),
+                                answer_date=datetime.now(pytz.timezone('Europe/Madrid')),
                                 response=f'response {i}')
     answered.save()
 print("Finished")
