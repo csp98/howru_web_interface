@@ -23,29 +23,30 @@ for i in range(200):
     doctor.assigned_questions.add(question)
     # Patients
     patient = Patient(identifier=random.randint(1, 1e4),
-                      name=f'Patient number {i}',
+                      name=f'Patient number {random.randint(1, 1e4)}',
                       _gender=random.choice(["M", "F", "O"]),
-                      username=f'username{i}',
+                      username=f'username{random.randint(1, 1e4)}',
                       language=random.choice(["ES", "GB"])
                       )
     patient.schedule = "15:00"
     patient.picture = random.choice(AVATARS_LIST)
     patient.save()
     doctor.patient_set.add(patient)
-
-    # Pending questions
-    pending = PendingQuestion(doctor_id=doctor,
-                              question_id=question,
-                              patient_id=patient,
-                              answering=False)
-    pending.save()
-    # Answered questions
-    answered = AnsweredQuestion(doctor_id=doctor,
-                                question_id=question,
-                                patient_id=patient,
-                                answer_date=datetime.now(pytz.timezone('Europe/Madrid')).replace(
-                                    hour=random.randint(0, 23), minute=random.randint(0,59)),
-                                response=f'response {i}')
-    answered.save()
+    # Journal entries for each patient
+    for j in range(random.randint(1,15)):
+        # Pending questions
+        pending = PendingQuestion(doctor_id=doctor,
+                                  question_id=question,
+                                  patient_id=patient,
+                                  answering=False)
+        pending.save()
+        # Answered questions
+        answered = AnsweredQuestion(doctor_id=doctor,
+                                    question_id=question,
+                                    patient_id=patient,
+                                    answer_date=datetime.now(pytz.timezone('Europe/Madrid')).replace(
+                                        hour=random.randint(0, 23), minute=random.randint(0,59)),
+                                    response=f'response {j}')
+        answered.save()
 doctor.save()
 print("Finished")
