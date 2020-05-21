@@ -1,10 +1,11 @@
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-from django.shortcuts import render, redirect
 from django.db.models import Q
-from .models import Question, Doctor
+from django.shortcuts import render, redirect
+
 # Create your views here.
 from .forms import QuestionForm
+from .models import Question, Doctor
 
 
 @login_required(login_url="/login/")
@@ -17,7 +18,9 @@ def create(request):
             form.instance.creator_id = request.user.doctor
             form.save()
             request.user.doctor.assigned_questions.add(form.instance)
-            return my_questions(request, new_context={"success_msg": "Question has been successfully created"})
+            request.session['message'] = "Question has been successfully created"
+            page = request.session.pop('my_questions_page', 1)
+            return redirect(f'/questions_manager/my_questions?page={page}')
     else:
         form = QuestionForm()
     context = {
@@ -27,8 +30,8 @@ def create(request):
 
 
 @login_required(login_url="/login/")
-def my_questions(request, new_context={}):
-    all_questions = request.user.doctor.assigned_questions.all()
+def my_questions(request):
+    all_questions = request.user.doctor.assigned_questions.all().order_by('text')
     page = request.GET.get('page', 1)
     paginator = Paginator(all_questions, 10)
     try:
@@ -37,20 +40,21 @@ def my_questions(request, new_context={}):
         questions = paginator.page(1)
     except EmptyPage:
         questions = paginator.page(paginator.num_pages)
+    request.session['my_questions_page'] = page
     context = {
         'questions': questions,
+        'success_msg': request.session.pop('message', None)
     }
-    context.update(new_context)
     return render(request, 'questions_manager/my_questions.html', context)
 
 
 @login_required(login_url="/login/")
-def public_questions(request, new_context={}):
+def public_questions(request):
     doctor = Doctor.objects.get(user=request.user)
     all_questions = Question.objects.filter(
         # ~Q(creator_id=doctor) &
         Q(public=True)
-    )
+    ).order_by('text')
     page = request.GET.get('page', 1)
     paginator = Paginator(all_questions, 10)
     try:
@@ -59,10 +63,11 @@ def public_questions(request, new_context={}):
         questions = paginator.page(1)
     except EmptyPage:
         questions = paginator.page(paginator.num_pages)
+    request.session['public_questions_page'] = page
     context = {
         'questions': questions,
+        'success_msg': request.session.pop('message', None)
     }
-    context.update(new_context)
     return render(request, 'questions_manager/public_questions.html', context)
 
 
@@ -71,10 +76,9 @@ def assign(request, question_id):
     question = Question.objects.get(id=question_id)
     question.doctor_set.add(request.user.doctor)
     question.save()
-    context = {
-        "success_msg": "Question has been successfully assigned"
-    }
-    return public_questions(request, context)
+    request.session['message'] = "Question has been successfully modified"
+    page = request.session.pop('public_questions_page', 1)
+    return redirect(f'/questions_manager/public_questions?page={page}')
 
 
 @login_required(login_url="/login/")
@@ -83,7 +87,9 @@ def delete(request, question_id):
     context = {"question": question}
     if request.method == "POST":
         request.user.doctor.assigned_questions.remove(question)
-        return my_questions(request, new_context={"success_msg": "Question has been successfully deleted"})
+        request.session['message'] = "Question has been successfully deleted"
+        page = request.session.pop('my_questions_page', 1)
+        return redirect(f'/questions_manager/my_questions?page={page}')
     return render(request, 'questions_manager/delete.html', context)
 
 
@@ -94,7 +100,9 @@ def modify(request, question_id):
         if form.is_valid():
             form.instance.responses = form.cleaned_data.get('responses')
             form.save()
-            return my_questions(request, new_context={"success_msg": "Question has been successfully modified"})
+            request.session['message'] = "Question has been successfully modified"
+            page = request.session.pop('my_questions_page', 1)
+            return redirect(f'/questions_manager/my_questions?page={page}')
     else:
         form = QuestionForm(instance=Question.objects.get(id=question_id))
     return render(request, 'questions_manager/modify.html', context={"form": form})

@@ -15,21 +15,7 @@
                           enctype="multipart/form-data"
                           method="post">
                         {% csrf_token %}
-                        {% if question.public and question.creator_id == request.user.doctor %}
-                        <div class="form-group row">
-                            <label class="col-md-5 col-form-label" for="delete_for_others">Delete it for other
-                                doctors?</label>
-                            <div class="col-md-4">
-                                <select class="form-control" id="delete_for_others" name="delete_for_others" required>
-                                    <option value="">Select...</option>
-                                    <option value="Yes">Yes</option>
-                                    <option value="No">No</option>
-                                </select>
-                            </div>
-                        </div>
-                        {% endif %}
                         <div class="text-center">
-
                             <button class="btn btn-sm btn-danger" name="login" type="submit">Confirm</button>
                             <a href="/questions_manager/my_questions/">
                                 <button class="btn btn-sm btn-primary" type="button"> Back</button>
