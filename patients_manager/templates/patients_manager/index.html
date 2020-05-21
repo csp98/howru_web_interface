@@ -1,5 +1,6 @@
 {% extends "layouts/base.html" %}
 {% load get_latest_answer_time from templatetags %}
+{% load paginate from pagination %}
 {% block title %} Patients Manager {% endblock %}
 
 {% block content %}
@@ -74,14 +75,20 @@
                     </tbody>
                 </table>
                 {% if patients.has_other_pages %}
-                <ul class="pagination">
+                <ul class="pagination" style="justify-content: center;">
+                    {% if patients.number == 1 %}
+                    <li class="page-item"><a class="page-link disabled">⇤</a></li>
+                    {% else %}
+                    <li class="page-item"><a class="page-link"
+                                             href="?page=1">⇤</a></li>
+                    {% endif %}
                     {% if patients.has_previous %}
                     <li class="page-item"><a class="page-link"
-                                             href="?page={{ patients.previous_page_number }}">Prev</a></li>
+                                             href="?page={{ patients.previous_page_number }}">&laquo;</a></li>
                     {% else %}
-                    <li class="page-item"><a class="page-link disabled">Prev</a></li>
+                    <li class="page-item"><a class="page-link disabled">&laquo;</a></li>
                     {% endif %}
-                    {% for i in patients.paginator.page_range %}
+                    {% for i in patients.paginator|paginate:patients.number %}
                     {% if patients.number == i %}
                     <li class="page-item active"><a class="page-link" href="#">{{i}}</a></li>
                     {% else %}
@@ -89,10 +96,17 @@
                     {% endif %}
                     {% endfor %}
                     {% if patients.has_next %}
-                    <li class="page-item"><a class="page-link" href="?page={{ patients.next_page_number }}">Next</a>
+                    <li class="page-item"><a class="page-link"
+                                             href="?page={{ patients.next_page_number }}">&raquo;</a>
                     </li>
                     {% else %}
-                    <li class="page-item"><a class="page-link disabled">Next</a></li>
+                    <li class="page-item"><a class="page-link disabled">&raquo;</a></li>
+                    {% endif %}
+                    {% if patients.number == patients.paginator.num_pages %}
+                    <li class="page-item"><a class="page-link disabled">⇥</a></li>
+                    {% else %}
+                    <li class="page-item"><a class="page-link"
+                                             href="?page={{ patients.paginator.num_pages }}">⇥</a></li>
                     {% endif %}
                 </ul>
                 {% endif %}

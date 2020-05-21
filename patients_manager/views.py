@@ -58,7 +58,15 @@ def unassign(request, patient_id):
 
 @login_required(login_url="/login/")
 def assign_questions(request, patient_id, new_context={}):
-    questions = request.user.doctor.assigned_questions.all()
+    all_questions = request.user.doctor.assigned_questions.all()
+    page = request.GET.get('page', 1)
+    paginator = Paginator(all_questions, 10)
+    try:
+        questions = paginator.page(page)
+    except PageNotAnInteger:
+        questions = paginator.page(1)
+    except EmptyPage:
+        questions = paginator.page(paginator.num_pages)
     context = {
         'patient': Patient.objects.get(identifier=patient_id),
         'questions': questions,

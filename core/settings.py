@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'data_viewer.apps.DataViewerConfig',
     'patients_manager.apps.PatientsManagerConfig',
     'questions_manager.apps.QuestionsManagerConfig',
+    'django_extensions'
 ]
 
 MIDDLEWARE = [
