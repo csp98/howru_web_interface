@@ -1,4 +1,5 @@
 import os
+import random
 from datetime import datetime
 
 import pytz
@@ -8,29 +9,29 @@ from howru_models.models import *
 from django.contrib.auth.models import User
 
 # Get doctor
-doctor = User.objects.get(username='carlossanchez').doctor
+doctor = User.objects.get(username='data_populator').doctor
 # Create question
 for i in range(200):
     # Questions
     question = Question(responses=["response 1", "response 2", "response 3", "response 4"],
                         text=f'This is test question number {i}',
                         creator_id=doctor,
-                        language="GB",
+                        language=random.choice(["ES", "GB"]),
                         public=True)
     question.save()
     doctor.assigned_questions.add(question)
-    doctor.save()
     # Patients
-    patient = Patient(identifier=i,
+    patient = Patient(identifier=random.randint(1, 1e4),
                       name=f'Patient number {i}',
-                      _gender="M",
+                      _gender=random.choice(["M", "F", "O"]),
                       username=f'username{i}',
-                      language="ES",
-                      assigned_doctor=doctor
+                      language=random.choice(["ES", "GB"])
                       )
-    patient.schedule="15:00"
+    patient.schedule = "15:00"
     patient.picture = '/opt/web_interface/core/static/assets/favicon/icon.png'
     patient.save()
+    doctor.patient_set.add(patient)
+
     # Pending questions
     pending = PendingQuestion(doctor_id=doctor,
                               question_id=question,
@@ -41,7 +42,9 @@ for i in range(200):
     answered = AnsweredQuestion(doctor_id=doctor,
                                 question_id=question,
                                 patient_id=patient,
-                                answer_date=datetime.now(pytz.timezone('Europe/Madrid')),
+                                answer_date=datetime.now(pytz.timezone('Europe/Madrid')).replace(
+                                    hour=random.randint(0, 23), minute=random.randint(0,59)),
                                 response=f'response {i}')
     answered.save()
+doctor.save()
 print("Finished")
