@@ -1,10 +1,13 @@
 from django import template
 
+from core import settings
+
 register = template.Library()
 
 
 @register.filter
-def paginate(paginator, current, num_pages=10):
+def paginate(paginator, current):
+    num_pages = settings.PAGE_SIZE
     if paginator.num_pages > 2 * num_pages:
         start = max(1, current - num_pages)
         end = min(paginator.num_pages, current + num_pages)

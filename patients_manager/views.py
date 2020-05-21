@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.shortcuts import render, redirect
-
+from django.conf import settings
 # Create your views here.
 from howru_models.models import Patient, Doctor, PendingQuestion
 from patients_manager.forms import AssignPatientForm
@@ -12,7 +12,7 @@ def index(request, new_context={}):
     doctor = Doctor.objects.get(user=request.user)
     all_patients = doctor.patient_set.all().order_by('username')
     page = request.GET.get('page', 1)
-    paginator = Paginator(all_patients, 10)
+    paginator = Paginator(all_patients, settings.PAGE_SIZE)
     try:
         patients = paginator.page(page)
     except PageNotAnInteger:
@@ -65,7 +65,7 @@ def unassign(request, patient_id):
 def assign_questions(request, patient_id):
     all_questions = request.user.doctor.assigned_questions.all().order_by('text')
     page = request.GET.get('page', 1)
-    paginator = Paginator(all_questions, 10)
+    paginator = Paginator(all_questions, settings.PAGE_SIZE)
     try:
         questions = paginator.page(page)
     except PageNotAnInteger:

@@ -2,6 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.models import Q
 from django.shortcuts import render, redirect
+from django.conf import settings
 
 # Create your views here.
 from .forms import QuestionForm
@@ -33,7 +34,7 @@ def create(request):
 def my_questions(request):
     all_questions = request.user.doctor.assigned_questions.all().order_by('text')
     page = request.GET.get('page', 1)
-    paginator = Paginator(all_questions, 10)
+    paginator = Paginator(all_questions, settings.PAGE_SIZE)
     try:
         questions = paginator.page(page)
     except PageNotAnInteger:
@@ -56,7 +57,7 @@ def public_questions(request):
         Q(public=True)
     ).order_by('text')
     page = request.GET.get('page', 1)
-    paginator = Paginator(all_questions, 10)
+    paginator = Paginator(all_questions, settings.PAGE_SIZE)
     try:
         questions = paginator.page(page)
     except PageNotAnInteger:
