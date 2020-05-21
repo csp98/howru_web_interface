@@ -79,17 +79,20 @@ WSGI_APPLICATION = 'core.wsgi.application'
 ROUTES_FILE_PATH = '/etc/howru/cfg/routes.json'
 with open(ROUTES_FILE_PATH) as routes_file:
     json_file = json.load(routes_file)
+    NAME = json_file['name']
+    USER = json_file['user']
+    PWD = json_file['password']
     HOST = json_file['host']
     PORT = json_file['port']
 
-DATABASES =  {
+DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',
-        'USER': 'postgres',
-        'PASSWORD': 'postgres',
-        'HOST': 'db',
-        'PORT': 5432,
+        'NAME': NAME,
+        'USER': USER,
+        'PASSWORD': PWD,
+        'HOST': HOST,
+        'PORT': PORT,
     }
 }
 
