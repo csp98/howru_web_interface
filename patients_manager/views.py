@@ -35,7 +35,7 @@ def assign(request):
         if form.is_valid():
             try:
                 username = form.cleaned_data.get('username')
-                patient = Patient.objects.get(username=username)
+                patient = Patient.objects.get(username__iexact=username)
                 doctor = Doctor.objects.get(user=request.user)
                 doctor.patient_set.add(patient)
                 request.session['message'] = f'Patient {username} has been successfully added'
