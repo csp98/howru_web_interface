@@ -15,12 +15,8 @@
                                 <use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-user-follow"></use>
                             </svg>
                         </div>
-                        <div class="text-value-lg">385</div>
+                        <div class="text-value-lg">{{number_associated_patients}}</div>
                         <small class="text-muted text-uppercase font-weight-bold">Associated patients</small>
-                        <div class="progress progress-white progress-xs mt-3">
-                            <div aria-valuemax="100" aria-valuemin="0" aria-valuenow="25" class="progress-bar"
-                                 role="progressbar" style="width: 25%"></div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -33,12 +29,8 @@
                                 <use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-task"></use>
                             </svg>
                         </div>
-                        <div class="text-value-lg">385</div>
+                        <div class="text-value-lg">{{ submitted_questions }}</div>
                         <small class="text-muted text-uppercase font-weight-bold">Submitted questions</small>
-                        <div class="progress progress-white progress-xs mt-3">
-                            <div aria-valuemax="100" aria-valuemin="0" aria-valuenow="25" class="progress-bar"
-                                 role="progressbar" style="width: 25%"></div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -51,12 +43,8 @@
                                 <use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-speech"></use>
                             </svg>
                         </div>
-                        <div class="text-value-lg">385</div>
+                        <div class="text-value-lg">{{ total_answers }}</div>
                         <small class="text-muted text-uppercase font-weight-bold">Total answers</small>
-                        <div class="progress progress-white progress-xs mt-3">
-                            <div aria-valuemax="100" aria-valuemin="0" aria-valuenow="25" class="progress-bar"
-                                 role="progressbar" style="width: 25%"></div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -71,101 +59,82 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-sm-6">
-                                <div class="row">
-                                    <div class="col-6">
-                                        <div class="c-callout c-callout-info"><small class="text-muted">New patients
-                                            since last week</small>
-                                            <div class="text-value-lg">9,123</div>
-                                        </div>
-                                    </div>
-                                    <!-- /.col-->
-                                    <div class="col-6">
-                                        <div class="c-callout c-callout-danger"><small class="text-muted">Total
-                                            patients</small>
-                                            <div class="text-value-lg">22,643</div>
-                                        </div>
-                                    </div>
-                                    <!-- /.col-->
-                                </div>
-                                <!-- /.row-->
                                 <div>
-                                    <h5 style="text-align: center">Answers per day (%)</h5>
+                                    <h5 style="text-align: center">Answers per hour (%)</h5>
                                 </div>
                                 <hr class="mt-0">
                                 <div class="progress-group mb-4">
-                                    <div class="progress-group-prepend"><span class="progress-group-text">Monday</span>
+                                    <div class="progress-group-prepend"><span
+                                            class="progress-group-text">00:00-03:59</span>
                                     </div>
                                     <div class="progress-group-bars">
                                         <div class="progress progress-xl">
-                                            <div aria-valuemax="100" aria-valuemin="0" aria-valuenow="34"
-                                                 class="progress-bar bg-warning" role="progressbar"
-                                                 style="width: 34%"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="progress-group mb-4">
-                                    <div class="progress-group-prepend"><span class="progress-group-text">Tuesday</span>
-                                    </div>
-                                    <div class="progress-group-bars">
-                                        <div class="progress progress-xl">
-                                            <div aria-valuemax="100" aria-valuemin="0" aria-valuenow="34"
-                                                 class="progress-bar bg-warning" role="progressbar"
-                                                 style="width: 34%"></div>
+                                            <div aria-valuemax="100" aria-valuemin="0"
+                                                 class="progress-bar progress-bar-striped progress-bar-animated bg-warning"
+                                                 role="progressbar"
+                                                 style="width: {{answers_per_hour.0}}%"></div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="progress-group mb-4">
                                     <div class="progress-group-prepend"><span
-                                            class="progress-group-text">Wednesday</span></div>
+                                            class="progress-group-text">04:00-07:59</span>
+                                    </div>
                                     <div class="progress-group-bars">
                                         <div class="progress progress-xl">
                                             <div aria-valuemax="100" aria-valuemin="0" aria-valuenow="34"
-                                                 class="progress-bar bg-warning" role="progressbar"
-                                                 style="width: 34%"></div>
+                                                 class="progress-bar progress-bar-striped progress-bar-animated bg-warning"
+                                                 role="progressbar"
+                                                 style="width: {{answers_per_hour.1}}%"></div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="progress-group mb-4">
                                     <div class="progress-group-prepend"><span
-                                            class="progress-group-text">Thursday</span></div>
+                                            class="progress-group-text">08:00-11:59</span></div>
                                     <div class="progress-group-bars">
                                         <div class="progress progress-xl">
                                             <div aria-valuemax="100" aria-valuemin="0" aria-valuenow="34"
-                                                 class="progress-bar bg-warning" role="progressbar"
-                                                 style="width: 34%"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="progress-group mb-4">
-                                    <div class="progress-group-prepend"><span class="progress-group-text">Friday</span>
-                                    </div>
-                                    <div class="progress-group-bars">
-                                        <div class="progress progress-xl">
-                                            <div aria-valuemax="100" aria-valuemin="0" aria-valuenow="34"
-                                                 class="progress-bar bg-warning" role="progressbar"
-                                                 style="width: 34%"></div>
+                                                 class="progress-bar progress-bar-striped progress-bar-animated bg-warning"
+                                                 role="progressbar"
+                                                 style="width: {{answers_per_hour.2}}%"></div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="progress-group mb-4">
                                     <div class="progress-group-prepend"><span
-                                            class="progress-group-text">Saturday</span></div>
+                                            class="progress-group-text">12:00-15:59</span></div>
                                     <div class="progress-group-bars">
                                         <div class="progress progress-xl">
                                             <div aria-valuemax="100" aria-valuemin="0" aria-valuenow="34"
-                                                 class="progress-bar bg-warning" role="progressbar"
-                                                 style="width: 34%"></div>
+                                                 class="progress-bar progress-bar-striped progress-bar-animated bg-warning"
+                                                 role="progressbar"
+                                                 style="width: {{answers_per_hour.3}}%"></div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="progress-group mb-4">
-                                    <div class="progress-group-prepend"><span class="progress-group-text">Sunday</span>
+                                    <div class="progress-group-prepend"><span
+                                            class="progress-group-text">16:00-19:59</span>
                                     </div>
                                     <div class="progress-group-bars">
                                         <div class="progress progress-xl">
                                             <div aria-valuemax="100" aria-valuemin="0" aria-valuenow="34"
-                                                 class="progress-bar bg-warning" role="progressbar"
-                                                 style="width: 34%"></div>
+                                                 class="progress-bar progress-bar-striped progress-bar-animated bg-warning"
+                                                 role="progressbar"
+                                                 style="width: {{answers_per_hour.4}}%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="progress-group mb-4">
+                                    <div class="progress-group-prepend"><span
+                                            class="progress-group-text">20:00-23:59</span></div>
+                                    <div class="progress-group-bars">
+                                        <div class="progress progress-xl">
+                                            <div aria-valuemax="100" aria-valuemin="0" aria-valuenow="34"
+                                                 class="progress-bar progress-bar-striped progress-bar-animated bg-warning"
+                                                 role="progressbar"
+                                                 style="width: {{answers_per_hour.5}}%"></div>
                                         </div>
                                     </div>
                                 </div>
@@ -173,24 +142,10 @@
                             <!-- /.col-->
                             <div class="col-sm-6">
                                 <div class="row">
-                                    <div class="col-6">
-                                        <div class="c-callout c-callout-warning"><small
-                                                class="text-muted">TO DECIDE</small>
-                                            <div class="text-value-lg">78,623</div>
-                                        </div>
-                                    </div>
-                                    <!-- /.col-->
-                                    <div class="col-6">
-                                        <div class="c-callout c-callout-success"><small
-                                                class="text-muted">TO DECIDE</small>
-                                            <div class="text-value-lg">49,123</div>
-                                        </div>
-                                    </div>
-                                    <!-- /.col-->
                                 </div>
                                 <!-- /.row-->
                                 <div>
-                                    <h5 style="text-align: center">Answers per gender (%)</h5>
+                                    <h5 style="text-align: center">Patients per gender (%)</h5>
                                 </div>
                                 <hr class="mt-0">
                                 <div class="progress-group mb-5">
@@ -199,13 +154,14 @@
                                             <use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-user"></use>
                                         </svg>
                                         <div>Male</div>
-                                        <div class="mfs-auto font-weight-bold">43%</div>
+                                        <div class="mfs-auto font-weight-bold">{{ male_percentage }} %</div>
                                     </div>
                                     <div class="progress-group-bars">
                                         <div class="progress progress">
-                                            <div aria-valuemax="100" aria-valuemin="0" aria-valuenow="43"
-                                                 class="progress-bar bg-success" role="progressbar"
-                                                 style="width: 43%"></div>
+                                            <div aria-valuemax="100" aria-valuemin="0"
+                                                 class="progress-bar progress-bar-striped progress-bar-animated bg-success"
+                                                 role="progressbar"
+                                                 style="width: {{ male_percentage }}%"></div>
                                         </div>
                                     </div>
                                 </div>
@@ -215,13 +171,15 @@
                                             <use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-user-female"></use>
                                         </svg>
                                         <div>Female</div>
-                                        <div class="mfs-auto font-weight-bold">37%</div>
+                                        <div class="mfs-auto font-weight-bold">{{ female_percentage }}%</div>
                                     </div>
                                     <div class="progress-group-bars">
                                         <div class="progress progress">
-                                            <div aria-valuemax="100" aria-valuemin="0" aria-valuenow="43"
-                                                 class="progress-bar bg-info" role="progressbar"
-                                                 style="width: 43%"></div>
+                                            <div aria-valuemax="100" aria-valuemin="0"
+                                                 aria-valuenow="{{ female_percentage }}"
+                                                 class="progress-bar progress-bar-striped progress-bar-animated bg-info"
+                                                 role="progressbar"
+                                                 style="width: {{ female_percentage }}%"></div>
                                         </div>
                                     </div>
                                 </div>
@@ -231,13 +189,15 @@
                                             <use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-people"></use>
                                         </svg>
                                         <div>Other</div>
-                                        <div class="mfs-auto font-weight-bold">37%</div>
+                                        <div class="mfs-auto font-weight-bold">{{ other_percentage }} %</div>
                                     </div>
                                     <div class="progress-group-bars">
                                         <div class="progress progress">
-                                            <div aria-valuemax="100" aria-valuemin="0" aria-valuenow="43"
-                                                 class="progress-bar bg-danger" role="progressbar"
-                                                 style="width: 43%"></div>
+                                            <div aria-valuemax="100" aria-valuemin="0"
+                                                 aria-valuenow="{{ other_percentage }}"
+                                                 class="progress-bar progress-bar-striped progress-bar-animated bg-danger"
+                                                 role="progressbar"
+                                                 style="width: {{ other_percentage }}%"></div>
                                         </div>
                                     </div>
                                 </div>
@@ -259,147 +219,43 @@
                                         <use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-face"></use>
                                     </svg>
                                 </th>
-                                <th>User</th>
-                                <th class="text-center">Country</th>
-                                <th class="text-center">Total responses</th>
-                                <th>Last answer</th>
+                                <th style="text-align: center; vertical-align: middle;">Username</th>
+                                <th style="text-align: center; vertical-align: middle;">Language</th>
+                                <th style="text-align: center; vertical-align: middle;">Gender</th>
+                                <th style="text-align: center; vertical-align: middle;">Total responses</th>
                             </tr>
                             </thead>
                             <tbody>
+                            {% for patient in top_patients %}
                             <tr>
-                                <td class="text-center">
-                                    <div class="c-avatar"><img alt="user@email.com"
-                                                               class="c-avatar-img"
-                                                               src="/static/assets/img/avatars/1.jpg"></div>
+                                <td style="text-align: center; vertical-align: middle;">
+                                    <img height="60" src="data:image/png;base64,{{ patient.0.picture}}"
+                                         style="border-radius: 50%;"
+                                         width="50">
                                 </td>
-                                <td>
-                                    <div>Yiorgos Avraamu</div>
-                                    <div class="small text-muted">Registered: Jan 1, 2015</div>
+                                <td style="text-align: center; vertical-align: middle;">
+                                    {{ patient.0.username }}
                                 </td>
-                                <td class="text-center">
-                                    <svg class="c-icon c-icon-xl">
-                                        <use xlink:href="/static/assets/vendors/@coreui/icons/svg/flag.svg#cif-us"></use>
-                                    </svg>
-                                </td>
-                                <td class="text-center">
-                                    3000
-                                </td>
-                                <td>
-                                    <strong>10 sec ago</strong>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="text-center">
-                                    <div class="c-avatar"><img alt="user@email.com"
-                                                               class="c-avatar-img"
-                                                               src="/static/assets/img/avatars/2.jpg"></div>
-                                </td>
-                                <td>
-                                    <div>Avram Tarasios</div>
-                                    <div class="small text-muted">Registered: Jan 1, 2015</div>
-                                </td>
-                                <td class="text-center">
-                                    <svg class="c-icon c-icon-xl">
-                                        <use xlink:href="/static/assets/vendors/@coreui/icons/svg/flag.svg#cif-br"></use>
-                                    </svg>
-                                </td>
-                                <td class="text-center">
-                                    1200
-                                </td>
-                                <td>
-                                    <strong>5 minutes ago</strong>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="text-center">
-                                    <div class="c-avatar"><img alt="user@email.com"
-                                                               class="c-avatar-img"
-                                                               src="/static/assets/img/avatars/3.jpg"></div>
-                                </td>
-                                <td>
-                                    <div>Quintin Ed</div>
-                                    <div class="small text-muted">Registered: Jan 1, 2015</div>
-                                </td>
-                                <td class="text-center">
-                                    <svg class="c-icon c-icon-xl">
-                                        <use xlink:href="/static/assets/vendors/@coreui/icons/svg/flag.svg#cif-in"></use>
-                                    </svg>
-                                </td>
-                                <td class="text-center">
-                                    1000
-                                </td>
-                                <td>
-                                    <strong>1 hour ago</strong>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="text-center">
-                                    <div class="c-avatar"><img alt="user@email.com"
-                                                               class="c-avatar-img"
-                                                               src="/static/assets/img/avatars/4.jpg"></div>
-                                </td>
-                                <td>
-                                    <div>Enéas Kwadwo</div>
-                                    <div class="small text-muted"><span>Registered: Jan 1, 2015</div>
-                                </td>
-                                <td class="text-center">
-                                    <svg class="c-icon c-icon-xl">
-                                        <use xlink:href="/static/assets/vendors/@coreui/icons/svg/flag.svg#cif-fr"></use>
-                                    </svg>
-                                </td>
-                                <td class="text-center">
-                                    980
-                                </td>
-                                <td>
-                                    <strong>Last month</strong>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="text-center">
-                                    <div class="c-avatar"><img alt="user@email.com"
-                                                               class="c-avatar-img"
-                                                               src="/static/assets/img/avatars/5.jpg"></div>
-                                </td>
-                                <td>
-                                    <div>Agapetus Tadeáš</div>
-                                    <div class="small text-muted">Registered: Jan 1, 2015</div>
-                                </td>
-                                <td class="text-center">
+                                <td style="text-align: center; vertical-align: middle;">
+                                    {% if patient.0.language == "ES" %}
                                     <svg class="c-icon c-icon-xl">
                                         <use xlink:href="/static/assets/vendors/@coreui/icons/svg/flag.svg#cif-es"></use>
                                     </svg>
-                                </td>
-
-                                <td class="text-center">
-                                    800
-                                </td>
-                                <td>
-                                    <strong>Last week</strong>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="text-center">
-                                    <div class="c-avatar"><img alt="user@email.com"
-                                                               class="c-avatar-img"
-                                                               src="/static/assets/img/avatars/6.jpg"></div>
-                                </td>
-                                <td>
-                                    <div>Friderik Dávid</div>
-                                    <div class="small text-muted">Registered: Jan 1, 2015</div>
-                                </td>
-                                <td class="text-center">
+                                    {% else %}
                                     <svg class="c-icon c-icon-xl">
-                                        <use xlink:href="/static/assets/vendors/@coreui/icons/svg/flag.svg#cif-es"></use>
+                                        <use xlink:href="/static/assets/vendors/@coreui/icons/svg/flag.svg#cif-gb"></use>
                                     </svg>
+                                    {% endif %}
                                 </td>
-
-                                <td class="text-center">
-                                    420
+                                <td style="text-align: center; vertical-align: middle;">
+                                    {{ patient.0.get__gender_display }}
                                 </td>
-                                <td>
-                                    <strong>Yesterday</strong>
+                                <td style="text-align: center; vertical-align: middle;">
+                                    {{ patient.1 }}
                                 </td>
                             </tr>
+                            {% endfor %}
+
                             </tbody>
                         </table>
                     </div>
