@@ -60,11 +60,11 @@
                                 <div class="dropdown-menu"
                                      style="position: absolute; transform: translate3d(0px, 34px, 0px); top: 0px; left: 0px; will-change: transform;">
                                     <a class="dropdown-item" href="/questions_manager/modify/{{question.id}}">
-                                        Modify
+                                        &#128221; &nbsp; Modify
                                     </a>
                                     <div class="dropdown-divider"></div>
                                     <a class="dropdown-item" href="/questions_manager/delete/{{question.id}}">
-                                        Delete
+                                        &#10060; &nbsp; Delete
                                     </a>
                                 </div>
                             </div>
@@ -112,6 +112,9 @@
                 {% endif %}
                 <a href="/questions_manager/create">
                     <button class="btn btn-pill btn-block btn-primary" type="button">
+                        <svg class="c-icon">
+                            <use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-plus"></use>
+                        </svg>&nbsp;
                         Create a new question
                     </button>
                 </a>

@@ -72,12 +72,12 @@
                                      x-placement="bottom-start">
                                     <a class="dropdown-item"
                                        href="/patients_manager/assign_questions/{{patient.identifier}}/">
-                                        Assign questions
+                                        &#128172; &nbsp; Assign questions
                                     </a>
                                     <div class="dropdown-divider"></div>
                                     <a class="dropdown-item"
                                        href="/patients_manager/unassign/{{patient.identifier}}/">
-                                        Delete patient
+                                        &#10060; &nbsp; Delete patient
                                     </a>
                                 </div>
                             </div>
@@ -125,6 +125,9 @@
                 {% endif %}
                 <a href="/patients_manager/assign">
                     <button class="btn btn-pill btn-block btn-primary" type="button">
+                        <svg class="c-icon">
+                            <use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-plus"></use>
+                        </svg>&nbsp;
                         Add a new patient
                     </button>
                 </a>

@@ -77,7 +77,7 @@ def assign(request, question_id):
     question = Question.objects.get(id=question_id)
     question.doctor_set.add(request.user.doctor)
     question.save()
-    request.session['message'] = "Question has been successfully modified"
+    #request.session['message'] = "Question has been successfully modified"
     page = request.session.pop('public_questions_page', 1)
     return redirect(f'/questions_manager/public_questions?page={page}')
 

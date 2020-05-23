@@ -45,13 +45,19 @@
                         </td>
                         <td style="text-align: center; vertical-align: middle;">
                             {% if question in request.user.doctor.assigned_questions.all %}
-                            <button class="btn btn-pill btn-primary" disabled="" type="button">
-                                Assign
+                            <button class="btn btn-pill btn-success" disabled="" type="button">
+                                <svg class="c-icon">
+                                    <use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-check"></use>
+                                </svg>&nbsp;
+                                Added
                             </button>
                             {% else %}
                             <a href="/questions_manager/assign/{{question.id}}">
                                 <button class="btn btn-pill btn-primary" type="button">
-                                    Assign
+                                    <svg class="c-icon">
+                                        <use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-clone"></use>
+                                    </svg>&nbsp;
+                                    Add to My Questions
                                 </button>
                             </a>
                             {%endif%}
