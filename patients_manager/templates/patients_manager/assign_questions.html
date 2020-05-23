@@ -56,12 +56,18 @@
                             {% if not patient|is_question_assigned:question %}
                             <a href="/patients_manager/assign_questions/{{question.id}}/{{patient.identifier}}/">
                                 <button class="btn btn-pill btn-primary" type="button">
+                                    <svg class="c-icon">
+                                        <use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-task"></use>
+                                    </svg>&nbsp;
                                     Assign
                                 </button>
                             </a>
                             {% else %}
                             <a href="/patients_manager/unassign_questions/{{question.id}}/{{patient.identifier}}/">
                                 <button class="btn btn-pill btn-danger" type="button">
+                                    <svg class="c-icon">
+                                        <use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-x-circle"></use>
+                                    </svg>&nbsp;
                                     Unassign
                                 </button>
                             </a>
