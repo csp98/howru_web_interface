@@ -41,7 +41,15 @@
                             {% endif %}
                         </td>
                         <td style="text-align: center; vertical-align: middle;">
-                            {{ question.get_language_display }}
+                            {% if question.language == "ES" %}
+                            <svg class="c-icon c-icon-xl">
+                                <use xlink:href="/static/assets/vendors/@coreui/icons/svg/flag.svg#cif-es"></use>
+                            </svg>
+                            {% else %}
+                            <svg class="c-icon c-icon-xl">
+                                <use xlink:href="/static/assets/vendors/@coreui/icons/svg/flag.svg#cif-gb"></use>
+                            </svg>
+                            {% endif %}
                         </td>
                         <td style="text-align: center; vertical-align: middle;">
                             {% if question in request.user.doctor.assigned_questions.all %}
