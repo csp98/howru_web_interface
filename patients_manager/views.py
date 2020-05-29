@@ -9,7 +9,7 @@ from patients_manager.forms import AssignPatientForm
 
 @login_required(login_url="/login/")
 def index(request):
-    doctor = Doctor.objects.get(user=request.user)
+    doctor = request.user.doctor
     all_patients = doctor.patient_set.all().order_by('username')
     page = request.GET.get('page', 1)
     paginator = Paginator(all_patients, settings.PAGE_SIZE)
