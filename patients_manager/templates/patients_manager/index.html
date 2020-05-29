@@ -26,6 +26,7 @@
                         <th style="text-align: center; vertical-align: middle;">Username</th>
                         <th style="text-align: center; vertical-align: middle;">Language</th>
                         <th style="text-align: center; vertical-align: middle;">Gender</th>
+                        <th style="text-align: center; vertical-align: middle;">Assigned questions</th>
                         <th style="text-align: center; vertical-align: middle;">Last answer</th>
                         <th style="text-align: center; vertical-align: middle;">Actions</th>
                     </tr>
@@ -57,6 +58,12 @@
                         </td>
                         <td style="text-align: center; vertical-align: middle;">
                             {{ patient.get__gender_display }}
+                        </td>
+                         <td style="text-align: center; vertical-align: middle;">
+                             {% for question in patient.pendingquestion_set.all %}
+                                {{ question.question_id }}
+                                <br>
+                             {% endfor %}
                         </td>
                         <td style="text-align: center; vertical-align: middle;">
                             {{ patient|get_latest_answer_time }}
