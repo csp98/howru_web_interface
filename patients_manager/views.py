@@ -110,7 +110,6 @@ def unassign_question_to_patient(request, question_id, patient_id):
 
 @login_required(login_url="/login/")
 def view_data(request, patient_id):
-    # TODO
     answered_questions_set = Patient.objects.get(identifier=patient_id).answeredquestion_set
     list_of_questions = dict()
     for answered_question in answered_questions_set.all():
@@ -131,3 +130,9 @@ def view_data(request, patient_id):
         'patient': Patient.objects.get(identifier=patient_id)
     }
     return render(request, 'patients_manager/view_data.html', context)
+
+@login_required(login_url="/login/")
+def export(request):
+
+    context = {}
+    return render(request, 'patients_manager/export.html', context)

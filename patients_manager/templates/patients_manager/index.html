@@ -14,13 +14,21 @@
             </div>
             {% endif %}
             <div class="card-body">
+                <a href="export/">
+                    <button class="btn btn-pill btn-primary" style="float: right;" type="button">
+                        <svg class="c-icon">
+                            <use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-save"></use>
+                        </svg>
+                        &nbsp; Export
+                    </button>
+                </a>
                 <div class="col-md-6" style="margin: 0 auto;float: none;margin-bottom: 10px;">
                     <form class="form-horizontal">
                         {% csrf_token %}
                         <div class="input-group">
                             <input autocomplete="username" class="form-control" id="search" name="search"
-                                   type="search"
-                            placeholder="Patient username (empty to get all patients)">
+                                   placeholder="Patient username (empty to get all patients)"
+                                   type="search">
                             <span class="input-group-append">
                             <button class="btn btn-primary" type="submit">
                               <svg class="c-icon">
@@ -32,6 +40,7 @@
                     </form>
                 </div>
                 {% if patients %}
+
                 <table class="table table-responsive-sm table-bordered table-striped table-sm">
                     <thead>
                     <tr>
@@ -129,7 +138,8 @@
                     {% endif %}
                     {% if patients.has_previous %}
                     <li class="page-item"><a class="page-link"
-                                             href="?{% get_url request 'page' page_obj.previous_page_number %}">&laquo;</a></li>
+                                             href="?{% get_url request 'page' page_obj.previous_page_number %}">&laquo;</a>
+                    </li>
                     {% else %}
                     <li class="page-item"><a class="page-link disabled">&laquo;</a></li>
                     {% endif %}

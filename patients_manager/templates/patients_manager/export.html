@@ -1,0 +1,23 @@
+{% extends "layouts/base.html" %}
+{% load get_latest_answer_time from templatetags %}
+{% load paginate from pagination %}
+{% load get_url from get_search_url %}
+{% block title %} Patients Manager {% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-body">
+            EXPORT PAGE
+                form to select patients and dates
+                generate csv
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block javascripts %}
+<!-- Specific Page JS goes HERE  -->
+{% endblock javascripts %}
