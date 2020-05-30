@@ -89,7 +89,7 @@ def assign_question_to_patient(request, question_id, patient_id):
                                        patient_id=patient_id,
                                        answering=False)
     pending_question.save()
-    #request.session['message'] = "Question successfully assigned to patient"
+    # request.session['message'] = "Question successfully assigned to patient"
     page = request.session.pop('patient_questions_page', 1)
     return redirect(f'/patients_manager/assign_questions/{patient_id}?page={page}')
 
@@ -99,13 +99,30 @@ def unassign_question_to_patient(request, question_id, patient_id):
     pending_question = PendingQuestion.objects.get(doctor=request.user.doctor, question_id=question_id,
                                                    patient_id=patient_id)
     pending_question.delete()
-    #request.session['message'] = "Question successfully unassigned to patient"
+    # request.session['message'] = "Question successfully unassigned to patient"
     page = request.session.pop('patient_questions_page', 1)
     return redirect(f'/patients_manager/assign_questions/{patient_id}?page={page}')
+
 
 @login_required(login_url="/login/")
 def view_data(request, patient_id):
     # TODO
-    context = {}
+    answered_questions_set = Patient.objects.get(identifier=patient_id).answeredquestion_set
+    list_of_questions = dict()
+    for answered_question in answered_questions_set.all():
+        if answered_question.question not in list_of_questions.keys():
+            responses = dict()
+            dates = dict()
+            for r in answered_questions_set.all().order_by('answer_date'):
+                dates[r.answer_date.strftime("%d-%m")] = r.response
+            for response in answered_question.question.responses:
+                responses[response] = answered_questions_set.filter(response=response).count()
+            list_of_questions[answered_question.question] = {
+                "dates": dates,
+                'responses': responses
+            }
+    context = {
+        'list_of_questions': list_of_questions,
+        'patient': Patient.objects.get(identifier=patient_id)
+    }
     return render(request, 'patients_manager/view_data.html', context)
-
