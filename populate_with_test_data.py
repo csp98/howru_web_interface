@@ -42,13 +42,13 @@ for i in range(5):
 # Journal entries for each patient
 for patient in patients:
     for question in questions:
+        # Pending questions
+        pending = PendingQuestion(doctor=doctor,
+                                  question=question,
+                                  patient=patient,
+                                  answering=False)
+        pending.save()
         for j in range(1, 25):
-            # Pending questions
-            pending = PendingQuestion(doctor=doctor,
-                                      question=question,
-                                      patient=patient,
-                                      answering=False)
-            pending.save()
             # Answered questions
             answered = AnsweredQuestion(doctor=doctor,
                                         question=question,
