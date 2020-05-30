@@ -43,8 +43,8 @@
                             {% endif %}
                         </td>
                         <td style="text-align: center; vertical-align: middle;">
-                            {{ question.creator_id.user.username }}
-                            {% if question.creator_id.user.username == request.user.username %}
+                            {{ question.creator.user.username }}
+                            {% if question.creator.user.username == request.user.username %}
                             (You)
                             {% endif %}
                         </td>

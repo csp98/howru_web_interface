@@ -84,9 +84,9 @@ def assign_questions(request, patient_id):
 
 @login_required(login_url="/login/")
 def assign_question_to_patient(request, question_id, patient_id):
-    pending_question = PendingQuestion(doctor_id=request.user.doctor,
-                                       question_id_id=question_id,
-                                       patient_id_id=patient_id,
+    pending_question = PendingQuestion(doctor=request.user.doctor,
+                                       question_id=question_id,
+                                       patient_id=patient_id,
                                        answering=False)
     pending_question.save()
     #request.session['message'] = "Question successfully assigned to patient"
@@ -96,8 +96,8 @@ def assign_question_to_patient(request, question_id, patient_id):
 
 @login_required(login_url="/login/")
 def unassign_question_to_patient(request, question_id, patient_id):
-    pending_question = PendingQuestion.objects.get(doctor_id=request.user.doctor, question_id_id=question_id,
-                                                   patient_id_id=patient_id)
+    pending_question = PendingQuestion.objects.get(doctor=request.user.doctor, question_id=question_id,
+                                                   patient_id=patient_id)
     pending_question.delete()
     #request.session['message'] = "Question successfully unassigned to patient"
     page = request.session.pop('patient_questions_page', 1)

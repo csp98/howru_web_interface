@@ -61,8 +61,10 @@
                         </td>
                          <td style="text-align: center; vertical-align: middle;">
                              {% for question in patient.pendingquestion_set.all %}
-                                {{ question.question_id }}
+                                {{ question.question }}
                                 <br>
+                             {% empty %}
+                                -
                              {% endfor %}
                         </td>
                         <td style="text-align: center; vertical-align: middle;">

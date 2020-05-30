@@ -16,7 +16,7 @@ for i in range(200):
     # Questions
     question = Question(responses=["response 1", "response 2", "response 3", "response 4"],
                         text=f'This is test question number {random.randint(1, 1e4)}',
-                        creator_id=doctor,
+                        creator=doctor,
                         language=random.choice(["ES", "GB"]),
                         public=True)
     question.save()
@@ -35,15 +35,15 @@ for i in range(200):
     # Journal entries for each patient
     for j in range(random.randint(1,15)):
         # Pending questions
-        pending = PendingQuestion(doctor_id=doctor,
-                                  question_id=question,
-                                  patient_id=patient,
+        pending = PendingQuestion(doctor=doctor,
+                                  question=question,
+                                  patient=patient,
                                   answering=False)
         pending.save()
         # Answered questions
-        answered = AnsweredQuestion(doctor_id=doctor,
-                                    question_id=question,
-                                    patient_id=patient,
+        answered = AnsweredQuestion(doctor=doctor,
+                                    question=question,
+                                    patient=patient,
                                     answer_date=datetime.now(pytz.timezone('Europe/Madrid')).replace(
                                         hour=random.randint(0, 23), minute=random.randint(0,59)),
                                     response=f'response {j}')

@@ -19,7 +19,7 @@ from howru_models.models import AnsweredQuestion, Question, Patient
 def get_total_answers(doctor):
     total_answers = 0
     for patient in doctor.patient_set.all():
-        total_answers += AnsweredQuestion.objects.filter(doctor_id=doctor, patient_id=patient).count()
+        total_answers += AnsweredQuestion.objects.filter(doctor=doctor, patient=patient).count()
     return total_answers
 
 
@@ -57,17 +57,17 @@ def get_answers_per_hour(doctor):
     """
     timezone.activate(pytz.timezone('Europe/Madrid'))
     number_of_answers = [
-        AnsweredQuestion.objects.filter(doctor_id=doctor, answer_date__hour__gte=0,
+        AnsweredQuestion.objects.filter(doctor=doctor, answer_date__hour__gte=0,
                                         answer_date__hour__lt=4).count(),
-        AnsweredQuestion.objects.filter(doctor_id=doctor, answer_date__hour__gte=4,
+        AnsweredQuestion.objects.filter(doctor=doctor, answer_date__hour__gte=4,
                                         answer_date__hour__lt=8).count(),
-        AnsweredQuestion.objects.filter(doctor_id=doctor, answer_date__hour__gte=8,
+        AnsweredQuestion.objects.filter(doctor=doctor, answer_date__hour__gte=8,
                                         answer_date__hour__lt=12).count(),
-        AnsweredQuestion.objects.filter(doctor_id=doctor, answer_date__hour__gte=12,
+        AnsweredQuestion.objects.filter(doctor=doctor, answer_date__hour__gte=12,
                                         answer_date__hour__lt=16).count(),
-        AnsweredQuestion.objects.filter(doctor_id=doctor, answer_date__hour__gte=16,
+        AnsweredQuestion.objects.filter(doctor=doctor, answer_date__hour__gte=16,
                                         answer_date__hour__lt=20).count(),
-        AnsweredQuestion.objects.filter(doctor_id=doctor, answer_date__hour__gte=20,
+        AnsweredQuestion.objects.filter(doctor=doctor, answer_date__hour__gte=20,
                                         answer_date__hour__lt=24).count()
     ]
     total = sum(number_of_answers)
@@ -81,7 +81,7 @@ def index(request):
     top_patients = get_top_patients(doctor)
     doctor_patients = doctor.patient_set
     number_associated_patients = doctor_patients.count()
-    submitted_questions = Question.objects.filter(creator_id=doctor).count()
+    submitted_questions = Question.objects.filter(creator=doctor).count()
     total_answers = get_total_answers(doctor)
     male_percentage, female_percentage, other_percentage = get_gender_stats(doctor, number_associated_patients)
     answers_per_hour = get_answers_per_hour(doctor)

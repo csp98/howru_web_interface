@@ -16,7 +16,7 @@ def create(request):
         form = QuestionForm(request.POST)
         if form.is_valid():
             form.instance.responses = form.cleaned_data.get('responses')
-            form.instance.creator_id = request.user.doctor
+            form.instance.creator = request.user.doctor
             form.save()
             request.user.doctor.assigned_questions.add(form.instance)
             request.session['message'] = "Question has been successfully created"
@@ -52,9 +52,7 @@ def my_questions(request):
 @login_required(login_url="/login/")
 def public_questions(request):
     doctor = Doctor.objects.get(user=request.user)
-    all_questions = Question.objects.filter(
-        # ~Q(creator_id=doctor) &
-        Q(public=True)
+    all_questions = Question.objects.filter(Q(public=True)
     ).order_by('text')
     page = request.GET.get('page', 1)
     paginator = Paginator(all_questions, settings.PAGE_SIZE)
