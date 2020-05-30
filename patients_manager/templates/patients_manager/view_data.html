@@ -85,9 +85,6 @@ charts = {}
                     title: function(tooltipItem, data) {
                         return dates[tooltipItem[0].xLabel]
                     },
-                                       afterLabel: function(tooltipItem, data) {
-                        return dates[tooltipItem.xLabel]
-                    },
                 }
         },
         legend: {
@@ -146,6 +143,7 @@ charts = {}
 
     });
 {% endfor %}
+
 
 
 
