@@ -80,9 +80,9 @@
                         <td style="text-align: center; vertical-align: middle;">
                             {% if patient.pendingquestion_set.all %}
                                 <a aria-controls="show_questions" aria-expanded="false" class="btn btn-pill btn-secondary"
-                                   data-toggle="collapse" href="#show_questions">Show
+                                   data-toggle="collapse" href="#show_questions_{{patient}}">Show
                                     ({{patient.pendingquestion_set.all.count}})</a>
-                            <div class="collapse" id="show_questions">
+                            <div class="collapse" id="show_questions_{{patient}}">
                                 <div class="card card-body">
                                     {% for question in patient.pendingquestion_set.all %}
                                     {{ question.question }}

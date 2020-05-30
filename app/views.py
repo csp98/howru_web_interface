@@ -98,12 +98,6 @@ def index(request):
     }
     return render(request, "index.html", context)
 
-@login_required(login_url="/login/")
-def change_password(request):
-    # TODO
-    context = {}
-    return render(request, "change_password.html", context)
-
 
 @login_required(login_url="/login/")
 def pages(request):

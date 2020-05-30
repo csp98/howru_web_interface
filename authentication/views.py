@@ -3,9 +3,11 @@
 License: MIT
 Copyright (c) 2019 - present AppSeed.us
 """
-
-from django.contrib.auth import authenticate, login
+from django.contrib import messages
+from django.contrib.auth import authenticate, login, update_session_auth_hash
 # Create your views here.
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import PasswordChangeForm
 from django.shortcuts import render, redirect
 
 from .forms import LoginForm, SignUpForm
@@ -45,3 +47,20 @@ def register_user(request):
         form = SignUpForm()
 
     return render(request, "accounts/register.html", {"form": form})
+
+
+@login_required(login_url="/login/")
+def change_password(request):
+    success = False
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)  # Important!
+            success = True
+    else:
+        form = PasswordChangeForm(request.user)
+    return render(request, 'change_password.html', {
+        'form': form,
+        'success': success
+    })
