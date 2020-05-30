@@ -11,4 +11,6 @@ urlpatterns = [
          name='assign_question_to_patient'),
     path('unassign_questions/<int:question_id>/<int:patient_id>/', views.unassign_question_to_patient,
          name='unassign_question_to_patient'),
+    path('view_data/<int:patient_id>/', views.view_data, name='view_data'),
+
 ]

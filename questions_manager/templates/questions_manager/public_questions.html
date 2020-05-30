@@ -13,6 +13,24 @@
             {% endif %}
             <div class="card-body">
                 {% if questions %}
+                <div class="col-md-6" style="margin: 0 auto;float: none;margin-bottom: 10px;">
+                    <form action="/questions_manager/public_questions/search" class="form-horizontal"
+                          enctype="multipart/form-data"
+                          method="post">
+                        {% csrf_token %}
+                        <div class="input-group">
+                            <input autocomplete="username" class="form-control" id="search" name="search"
+                                   required type="text">
+                            <span class="input-group-append">
+                            <button class="btn btn-primary" type="submit">
+                              <svg class="c-icon">
+                                <use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-magnifying-glass"></use>
+                              </svg> Search
+                            </button>
+                            </span>
+                        </div>
+                    </form>
+                </div>
                 <table class="table table-responsive-sm table-bordered table-striped table-sm">
                     <thead>
                     <tr>

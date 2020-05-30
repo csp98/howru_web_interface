@@ -102,3 +102,10 @@ def unassign_question_to_patient(request, question_id, patient_id):
     #request.session['message'] = "Question successfully unassigned to patient"
     page = request.session.pop('patient_questions_page', 1)
     return redirect(f'/patients_manager/assign_questions/{patient_id}?page={page}')
+
+@login_required(login_url="/login/")
+def view_data(request, patient_id):
+    # TODO
+    context = {}
+    return render(request, 'patients_manager/view_data.html', context)
+

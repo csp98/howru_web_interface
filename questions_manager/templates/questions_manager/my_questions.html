@@ -13,7 +13,25 @@
             {% endif %}
             <div class="card-body">
                 {% if questions %}
-                <table class="table table-responsive-sm table-bordered table-striped table-sm">
+                <div class="col-md-6" style="margin: 0 auto;float: none;margin-bottom: 10px;">
+                    <form action="/questions_manager/my_questions/search" class="form-horizontal"
+                          enctype="multipart/form-data"
+                          method="post">
+                        {% csrf_token %}
+                        <div class="input-group">
+                            <input autocomplete="username" class="form-control" id="search" name="search"
+                                   required type="text">
+                            <span class="input-group-append">
+                            <button class="btn btn-primary" type="submit">
+                              <svg class="c-icon">
+                                <use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-magnifying-glass"></use>
+                              </svg> Search
+                            </button>
+                            </span>
+                        </div>
+                    </form>
+                </div>
+                <table class="table table-responsive-sm table-bordered table-striped table-sm" style="margin:10px;">
                     <thead>
                     <tr>
                         <th style="text-align: center; vertical-align: middle;">Question text</th>
@@ -76,22 +94,16 @@
                             {% endif %}
                         </td>
                         <td style="text-align: center; vertical-align: middle;">
-                            <div class="btn-group">
-                                <button aria-expanded="false" aria-haspopup="true"
-                                        class="btn btn-primary dropdown-toggle"
-                                        data-toggle="dropdown" type="button">Select ...
+                            <a href="/questions_manager/modify/{{question.id}}">
+                                <button class="btn btn-pill btn-info" style="margin:5px;" type="button">
+                                    &#128221; &nbsp; Modify
                                 </button>
-                                <div class="dropdown-menu"
-                                     style="position: absolute; transform: translate3d(0px, 34px, 0px); top: 0px; left: 0px; will-change: transform;">
-                                    <a class="dropdown-item" href="/questions_manager/modify/{{question.id}}">
-                                        &#128221; &nbsp; Modify
-                                    </a>
-                                    <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="/questions_manager/delete/{{question.id}}">
-                                        &#10060; &nbsp; Delete
-                                    </a>
-                                </div>
-                            </div>
+                            </a>
+                            <a href="/questions_manager/delete/{{question.id}}">
+                                <button class="btn btn-pill btn-warning" style="margin:5px;" type="button">
+                                    &#10060; &nbsp; Delete
+                                </button>
+                            </a>
                         </td>
                     </tr>
                     {% endfor %}

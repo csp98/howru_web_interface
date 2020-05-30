@@ -14,6 +14,24 @@
             {% endif %}
             <div class="card-body">
                 {% if patients %}
+                <div class="col-md-6" style="margin: 0 auto;float: none;margin-bottom: 10px;">
+                    <form action="/questions_manager/patients_manager/search" class="form-horizontal"
+                          enctype="multipart/form-data"
+                          method="post">
+                        {% csrf_token %}
+                        <div class="input-group">
+                            <input autocomplete="username" class="form-control" id="search" name="search"
+                                   required type="text">
+                            <span class="input-group-append">
+                            <button class="btn btn-primary" type="submit">
+                              <svg class="c-icon">
+                                <use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-magnifying-glass"></use>
+                              </svg> Search
+                            </button>
+                            </span>
+                        </div>
+                    </form>
+                </div>
                 <table class="table table-responsive-sm table-bordered table-striped table-sm">
                     <thead>
                     <tr>
@@ -59,37 +77,34 @@
                         <td style="text-align: center; vertical-align: middle;">
                             {{ patient.get__gender_display }}
                         </td>
-                         <td style="text-align: center; vertical-align: middle;">
-                             {% for question in patient.pendingquestion_set.all %}
-                                {{ question.question }}
-                                <br>
-                             {% empty %}
-                                -
-                             {% endfor %}
+                        <td style="text-align: center; vertical-align: middle;">
+                            {% for question in patient.pendingquestion_set.all %}
+                            {{ question.question }}
+                            <br>
+                            {% empty %}
+                            -
+                            {% endfor %}
                         </td>
                         <td style="text-align: center; vertical-align: middle;">
                             {{ patient|get_latest_answer_time }}
                         </td>
                         <td style="text-align: center; vertical-align: middle;">
-                            <div class="btn-group">
-                                <button aria-expanded="false" aria-haspopup="true"
-                                        class="btn btn-primary dropdown-toggle"
-                                        data-toggle="dropdown" type="button">Select ...
+                            <a href="/patients_manager/view_data/{{patient.identifier}}/">
+                                <button class="btn btn-pill btn-success" type="button">
+                                    📊 &nbsp; View data
                                 </button>
-                                <div class="dropdown-menu"
-                                     style="position: absolute; transform: translate3d(0px, 34px, 0px); top: 0px; left: 0px; will-change: transform;"
-                                     x-placement="bottom-start">
-                                    <a class="dropdown-item"
-                                       href="/patients_manager/assign_questions/{{patient.identifier}}/">
-                                        &#128172; &nbsp; Assign questions
-                                    </a>
-                                    <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item"
-                                       href="/patients_manager/unassign/{{patient.identifier}}/">
-                                        &#10060; &nbsp; Delete patient
-                                    </a>
-                                </div>
-                            </div>
+                            </a>
+                            <br>
+                            <a href="/patients_manager/assign_questions/{{patient.identifier}}/">
+                                <button class="btn btn-pill btn-info" style="margin:5px;" type="button">
+                                    &#128172; &nbsp; Assign questions
+                                </button>
+                            </a>
+                            <a href="/patients_manager/unassign/{{patient.identifier}}/">
+                                <button class="btn btn-pill btn-warning" style="margin:5px;" type="button">
+                                    &#10060; &nbsp; Delete patient
+                                </button>
+                            </a>
                         </td>
                     </tr>
                     {% endfor %}
