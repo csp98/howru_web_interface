@@ -82,16 +82,10 @@ charts = {}
           tooltips: {
                 callbacks: {
                     label: function(tooltipItem, data) {
-                        var label = data.datasets[tooltipItem.datasetIndex].label || '';
-
-                        if (label) {
-                            label += ': ';
-                        }
-                        label += responses[tooltipItem.xLabel];
-                        return label;
+                        return responses[tooltipItem.yLabel];
                     },
                     title: function(tooltipItem, data) {
-                        return dates[tooltipItem[0].xLabel]
+                        return ""
                     },
                 }
         },

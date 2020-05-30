@@ -113,7 +113,7 @@ def view_data(request, patient_id):
         if answered_question.question not in list_of_questions.keys():
             responses = dict()
             dates = dict()
-            for r in answered_questions_set.all().order_by('answer_date'):
+            for r in answered_questions_set.filter(question__text=answered_question.question.text).order_by('answer_date'):
                 dates[r.answer_date.strftime("%d-%m")] = r.response
             for response in answered_question.question.responses:
                 responses[response] = answered_questions_set.filter(response=response).count()
