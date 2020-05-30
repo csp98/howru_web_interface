@@ -85,7 +85,14 @@ def assign(request, question_id):
     question = Question.objects.get(id=question_id)
     question.doctor_set.add(request.user.doctor)
     question.save()
-    # request.session['message'] = "Question has been successfully modified"
+    if question.assigned_to_all:
+        all_patients = request.user.doctor.patient_set.all()
+        for patient in all_patients:
+            pending_question = PendingQuestion(doctor=request.user.doctor,
+                                               question=question,
+                                               patient=patient,
+                                               answering=False)
+            pending_question.save()
     page = request.session.pop('public_questions_page', 1)
     return redirect(f'/questions_manager/public_questions?page={page}')
 

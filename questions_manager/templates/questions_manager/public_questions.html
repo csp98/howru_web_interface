@@ -18,6 +18,9 @@
                     <tr>
                         <th style="text-align: center; vertical-align: middle;">Question text</th>
                         <th style="text-align: center; vertical-align: middle;">Possible responses</th>
+                        <th style="text-align: center; vertical-align: middle;">Assigned to all</th>
+                        <th style="text-align: center; vertical-align: middle;">Frequency</th>
+                        <th style="text-align: center; vertical-align: middle;">Priority</th>
                         <th style="text-align: center; vertical-align: middle;">Creator</th>
                         <th style="text-align: center; vertical-align: middle;">Language</th>
                         <th style="text-align: center; vertical-align: middle;">Actions</th>
@@ -33,6 +36,19 @@
                             {% for response in question.responses %}
                             {{response}} <br>
                             {% endfor %}
+                        </td>
+                        <td style="text-align: center; vertical-align: middle;">
+                            {% if question.assigned_to_all %}
+                            ✔️
+                            {% else %}
+                            ❌
+                            {% endif %}
+                        </td>
+                        <td style="text-align: center; vertical-align: middle;">
+                            {{ question.get_frequency_display }}
+                        </td>
+                        <td style="text-align: center; vertical-align: middle;">
+                            {{ question.priority }}
                         </td>
                         <td style="text-align: center; vertical-align: middle;">
                             {{ question.creator.user.username }}
