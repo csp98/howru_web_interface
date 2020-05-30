@@ -42,7 +42,11 @@ def create(request):
 
 @login_required(login_url="/login/")
 def my_questions(request):
-    all_questions = request.user.doctor.assigned_questions.all().order_by('text')
+    if 'search' in request.GET:
+        term = request.GET['search']
+        all_questions = request.user.doctor.assigned_questions.filter(text__icontains=term).order_by('text')
+    else:
+        all_questions = request.user.doctor.assigned_questions.all().order_by('text')
     page = request.GET.get('page', 1)
     paginator = Paginator(all_questions, settings.PAGE_SIZE)
     try:
@@ -61,9 +65,11 @@ def my_questions(request):
 
 @login_required(login_url="/login/")
 def public_questions(request):
-    doctor = Doctor.objects.get(user=request.user)
-    all_questions = Question.objects.filter(Q(public=True)
-                                            ).order_by('text')
+    if 'search' in request.GET:
+        term = request.GET['search']
+        all_questions = request.user.doctor.assigned_questions.filter(text__icontains=term, public=True).order_by('text')
+    else:
+        all_questions = request.user.doctor.assigned_questions.filter(public=True).order_by('text')
     page = request.GET.get('page', 1)
     paginator = Paginator(all_questions, settings.PAGE_SIZE)
     try:

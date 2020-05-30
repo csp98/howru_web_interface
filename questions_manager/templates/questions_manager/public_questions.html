@@ -1,5 +1,6 @@
 {% extends "layouts/base.html" %}
 {% load paginate from pagination %}
+{% load get_url from get_search_url %}
 {% block title %} Patients Manager {% endblock %}
 
 {% block content %}
@@ -12,15 +13,12 @@
             </div>
             {% endif %}
             <div class="card-body">
-                {% if questions %}
                 <div class="col-md-6" style="margin: 0 auto;float: none;margin-bottom: 10px;">
-                    <form action="/questions_manager/public_questions/search" class="form-horizontal"
-                          enctype="multipart/form-data"
-                          method="post">
+                    <form class="form-horizontal">
                         {% csrf_token %}
                         <div class="input-group">
                             <input autocomplete="username" class="form-control" id="search" name="search"
-                                   required type="text">
+                                   type="search">
                             <span class="input-group-append">
                             <button class="btn btn-primary" type="submit">
                               <svg class="c-icon">
@@ -31,6 +29,7 @@
                         </div>
                     </form>
                 </div>
+                {% if questions %}
                 <table class="table table-responsive-sm table-bordered table-striped table-sm">
                     <thead>
                     <tr>
@@ -114,11 +113,12 @@
                     <li class="page-item"><a class="page-link disabled">⇤</a></li>
                     {% else %}
                     <li class="page-item"><a class="page-link"
-                                             href="?page=1">⇤</a></li>
+                                             href="?{% get_url request 'page' 1 %}">⇤</a></li>
                     {% endif %}
                     {% if questions.has_previous %}
                     <li class="page-item"><a class="page-link"
-                                             href="?page={{ questions.previous_page_number }}">&laquo;</a></li>
+                                             href="?{% get_url request 'page' page_obj.previous_page_number %}">&laquo;</a>
+                    </li>
                     {% else %}
                     <li class="page-item"><a class="page-link disabled">&laquo;</a></li>
                     {% endif %}
@@ -126,12 +126,12 @@
                     {% if questions.number == i %}
                     <li class="page-item active"><a class="page-link" href="#">{{i}}</a></li>
                     {% else %}
-                    <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+                    <li class="page-item"><a class="page-link" href="?{% get_url request 'page' i %}">{{ i }}</a></li>
                     {% endif %}
                     {% endfor %}
                     {% if questions.has_next %}
                     <li class="page-item"><a class="page-link"
-                                             href="?page={{ questions.next_page_number }}">&raquo;</a>
+                                             href="?{% get_url request 'page' page_obj.next_page_number %}">&raquo;</a>
                     </li>
                     {% else %}
                     <li class="page-item"><a class="page-link disabled">&raquo;</a></li>
@@ -140,7 +140,7 @@
                     <li class="page-item"><a class="page-link disabled">⇥</a></li>
                     {% else %}
                     <li class="page-item"><a class="page-link"
-                                             href="?page={{ questions.paginator.num_pages }}">⇥</a></li>
+                                             href="?{% get_url request 'page' paginator.num_pages %}">⇥</a></li>
                     {% endif %}
                 </ul>
                 {% endif %}

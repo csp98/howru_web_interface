@@ -10,7 +10,11 @@ from patients_manager.forms import AssignPatientForm
 @login_required(login_url="/login/")
 def index(request):
     doctor = request.user.doctor
-    all_patients = doctor.patient_set.all().order_by('username')
+    if 'search' in request.GET:
+        term = request.GET['search']
+        all_patients = doctor.patient_set.filter(name__icontains=term).order_by('username')
+    else:
+        all_patients = doctor.patient_set.all().order_by('username')
     page = request.GET.get('page', 1)
     paginator = Paginator(all_patients, settings.PAGE_SIZE)
     try:

@@ -21,6 +21,6 @@ def paginate(paginator, current):
         elif end > paginator.num_pages:
             start -= (end - paginator.num_pages)
             end = paginator.num_pages
-        pages = [page for page in range(start, end+1)]
+        pages = [page for page in range(start, end + 1)]
         return pages[:(2 * num_pages + 1)]
     return paginator.page_range

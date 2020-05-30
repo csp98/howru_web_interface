@@ -1,6 +1,7 @@
 {% extends "layouts/base.html" %}
 {% load get_latest_answer_time from templatetags %}
 {% load paginate from pagination %}
+{% load get_url from get_search_url %}
 {% block title %} Patients Manager {% endblock %}
 
 {% block content %}
@@ -13,15 +14,12 @@
             </div>
             {% endif %}
             <div class="card-body">
-                {% if patients %}
                 <div class="col-md-6" style="margin: 0 auto;float: none;margin-bottom: 10px;">
-                    <form action="/questions_manager/patients_manager/search" class="form-horizontal"
-                          enctype="multipart/form-data"
-                          method="post">
+                    <form class="form-horizontal">
                         {% csrf_token %}
                         <div class="input-group">
                             <input autocomplete="username" class="form-control" id="search" name="search"
-                                   required type="text">
+                                   type="search">
                             <span class="input-group-append">
                             <button class="btn btn-primary" type="submit">
                               <svg class="c-icon">
@@ -32,6 +30,7 @@
                         </div>
                     </form>
                 </div>
+                {% if patients %}
                 <table class="table table-responsive-sm table-bordered table-striped table-sm">
                     <thead>
                     <tr>
@@ -79,9 +78,9 @@
                         </td>
                         <td style="text-align: center; vertical-align: middle;">
                             {% if patient.pendingquestion_set.all %}
-                                <a aria-controls="show_questions" aria-expanded="false" class="btn btn-pill btn-secondary"
-                                   data-toggle="collapse" href="#show_questions_{{patient}}">Show
-                                    ({{patient.pendingquestion_set.all.count}})</a>
+                            <a aria-controls="show_questions" aria-expanded="false" class="btn btn-pill btn-secondary"
+                               data-toggle="collapse" href="#show_questions_{{patient}}">Show
+                                ({{patient.pendingquestion_set.all.count}})</a>
                             <div class="collapse" id="show_questions_{{patient}}">
                                 <div class="card card-body">
                                     {% for question in patient.pendingquestion_set.all %}
@@ -125,11 +124,11 @@
                     <li class="page-item"><a class="page-link disabled">⇤</a></li>
                     {% else %}
                     <li class="page-item"><a class="page-link"
-                                             href="?page=1">⇤</a></li>
+                                             href="?{% get_url request 'page' 1 %}">⇤</a></li>
                     {% endif %}
                     {% if patients.has_previous %}
                     <li class="page-item"><a class="page-link"
-                                             href="?page={{ patients.previous_page_number }}">&laquo;</a></li>
+                                             href="?{% get_url request 'page' page_obj.previous_page_number %}">&laquo;</a></li>
                     {% else %}
                     <li class="page-item"><a class="page-link disabled">&laquo;</a></li>
                     {% endif %}
@@ -137,12 +136,12 @@
                     {% if patients.number == i %}
                     <li class="page-item active"><a class="page-link" href="#">{{i}}</a></li>
                     {% else %}
-                    <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+                    <li class="page-item"><a class="page-link" href="?{% get_url request 'page' i %}">{{ i }}</a></li>
                     {% endif %}
                     {% endfor %}
                     {% if patients.has_next %}
                     <li class="page-item"><a class="page-link"
-                                             href="?page={{ patients.next_page_number }}">&raquo;</a>
+                                             href="?{% get_url request 'page' page_obj.next_page_number %}">&raquo;</a>
                     </li>
                     {% else %}
                     <li class="page-item"><a class="page-link disabled">&raquo;</a></li>
@@ -151,7 +150,7 @@
                     <li class="page-item"><a class="page-link disabled">⇥</a></li>
                     {% else %}
                     <li class="page-item"><a class="page-link"
-                                             href="?page={{ patients.paginator.num_pages }}">⇥</a></li>
+                                             href="?{% get_url request 'page' paginator.num_pages %}">⇥</a></li>
                     {% endif %}
                 </ul>
                 {% endif %}
