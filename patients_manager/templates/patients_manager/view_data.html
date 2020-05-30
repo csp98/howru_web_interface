@@ -63,8 +63,6 @@ charts = {}
         data.push(get_response_value(r, dates_json[r]));
     }
 
-
-    //window.alert('{{question_data.dates}}');
     charts['{{question.question}}_bar'] = new Chart(document.getElementById('{{question}}_bar'), {
       type: 'line',
       data: {
@@ -85,7 +83,10 @@ charts = {}
                         return responses[tooltipItem.yLabel];
                     },
                     title: function(tooltipItem, data) {
-                        return ""
+                        return dates[tooltipItem[0].xLabel]
+                    },
+                                       afterLabel: function(tooltipItem, data) {
+                        return dates[tooltipItem.xLabel]
                     },
                 }
         },
@@ -94,35 +95,36 @@ charts = {}
         },
         responsive: true,
         scales: {
-      xAxes: [{
-        type: 'linear',
-        position: 'bottom',
-        scaleLabel: {
-          display: true,
-          labelString: 'Date'
-        },
-        ticks: {
-          min: 0,
-          max: dates.length - 1,
-          callback: function(value) {
-            return dates[value];
-          },
-        },
-      }],
-      yAxes: [{
-        scaleLabel: {
-          display: true,
-          labelString: 'Answer'
-        },
-        ticks: {
-          reverse: true,
-          min: 0,
-          max: responses.length - 1,
-          callback: function(value) {
-            return responses[value];
-          },
-        },
-      }]
+          xAxes: [{
+            type: 'linear',
+            position: 'bottom',
+            scaleLabel: {
+              display: true,
+              labelString: 'Date'
+            },
+            ticks: {
+              min: 0,
+              max: dates.length - 1,
+              maxTicksLimit: 20,
+              stepSize: 1,
+              callback: function(value) {
+                return dates[value];
+              },
+            },
+          }],
+          yAxes: [{
+            scaleLabel: {
+              display: true,
+              labelString: 'Answer'
+            },
+            ticks: {
+              min: 0,
+              max: responses.length - 1,
+              callback: function(value) {
+                return responses[value];
+              },
+            },
+          }]
     }
       }
     });
@@ -144,6 +146,7 @@ charts = {}
 
     });
 {% endfor %}
+
 
 
 

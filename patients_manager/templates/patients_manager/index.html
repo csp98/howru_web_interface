@@ -78,12 +78,21 @@
                             {{ patient.get__gender_display }}
                         </td>
                         <td style="text-align: center; vertical-align: middle;">
-                            {% for question in patient.pendingquestion_set.all %}
-                            {{ question.question }}
-                            <br>
-                            {% empty %}
+                            {% if patient.pendingquestion_set.all %}
+                                <a aria-controls="show_questions" aria-expanded="false" class="btn btn-pill btn-secondary"
+                                   data-toggle="collapse" href="#show_questions">Show
+                                    ({{patient.pendingquestion_set.all.count}})</a>
+                            <div class="collapse" id="show_questions">
+                                <div class="card card-body">
+                                    {% for question in patient.pendingquestion_set.all %}
+                                    {{ question.question }}
+                                    <br>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            {% else %}
                             -
-                            {% endfor %}
+                            {% endif %}
                         </td>
                         <td style="text-align: center; vertical-align: middle;">
                             {{ patient|get_latest_answer_time }}

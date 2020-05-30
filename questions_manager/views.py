@@ -103,7 +103,7 @@ def delete(request, question_id):
     context = {"question": question}
     if request.method == "POST":
         request.user.doctor.assigned_questions.remove(question)
-        request.session['message'] = "Question has been successfully deleted"
+        request.session['message'] = f'Question {question} has been successfully deleted'
         page = request.session.pop('my_questions_page', 1)
         return redirect(f'/questions_manager/my_questions?page={page}')
     return render(request, 'questions_manager/delete.html', context)
@@ -117,7 +117,7 @@ def modify(request, question_id):
             form.instance.responses = form.cleaned_data.get('responses')
             form.instance.assigned_to_all = form.cleaned_data.get('assigned_to_all')
             form.save()
-            request.session['message'] = "Question has been successfully modified"
+            request.session['message'] = f'Question {form.instance} has been successfully modified'
             # If assigned to all is checked, assign it to all patients
             if form.instance.assigned_to_all:
                 all_patients = request.user.doctor.patient_set.all()

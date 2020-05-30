@@ -56,7 +56,7 @@ def unassign(request, patient_id):
     context = {"patient": patient}
     if request.method == "POST":
         request.user.doctor.patient_set.remove(patient)
-        request.session['message'] = f'Patient has been successfully unassigned'
+        request.session['message'] = f'Patient {patient} has been successfully deleted'
         page = request.session.pop('patients_page', 1)
         return redirect(f'/patients_manager?page={page}')
     return render(request, 'patients_manager/unassign.html', context)
@@ -114,7 +114,8 @@ def view_data(request, patient_id):
             responses = dict()
             dates = dict()
             for r in answered_questions_set.filter(question__text=answered_question.question.text).order_by('answer_date'):
-                dates[r.answer_date.strftime("%d-%m")] = r.response
+                dates[r.answer_date.strftime("%d-%m-%y")] = r.response
+            print(dates)
             for response in answered_question.question.responses:
                 responses[response] = answered_questions_set.filter(response=response).count()
             list_of_questions[answered_question.question] = {
