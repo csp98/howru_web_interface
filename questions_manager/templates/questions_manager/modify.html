@@ -14,7 +14,7 @@
                     {% for field in form %}
                     {% for error in field.errors %}
                     <div class="alert alert-danger">
-                        <strong>{{ field.name }} {{  error }}</strong>
+                        <strong>{{ field.name }} {{ error }}</strong>
                     </div>
                     {% endfor %}
                     {% endfor %}
@@ -44,7 +44,8 @@
                         <div class="form-group row">
                             <label class="col-md-3 col-form-label" for="responses_field">Possible responses</label>
                             <div class="col-md-9">
-                                <textarea class="form-control" id="responses_field" name="responses_field" required rows="9">
+                                <textarea class="form-control" id="responses_field" name="responses_field" required
+                                          rows="9">
 {% for response in form.instance.responses %}{{ response }}&#10;{% endfor %}
                                 </textarea>
                             </div>
@@ -73,6 +74,54 @@
                                     {% else %}
                                     <option selected value="GB">English</option>
                                     <option value="ES">Spanish</option>
+                                    {% endif %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-3 col-form-label" for="frequency">Frequency</label>
+                            <div class="col-md-9">
+                                <select class="form-control" id="frequency" name="frequency" required>
+                                    {% if form.instance.frequency == "O" %}
+                                    <option selected value="O">Once</option>
+                                    <option value="D">Daily</option>
+                                    <option value="W">Weekly</option>
+                                    <option value="M">Monthly</option>
+                                    {% elif form.instance.frequency == "D" %}
+                                    <option value="O">Once</option>
+                                    <option selected value="D">Daily</option>
+                                    <option value="W">Weekly</option>
+                                    <option value=",">Monthly</option>
+                                    {% elif form.instance.frequency == "W" %}
+                                    <option value="O">Once</option>
+                                    <option value="D">Daily</option>
+                                    <option selected value="W">Weekly</option>
+                                    <option value="M">Monthly</option>
+                                    {% else %}
+                                    <option value="O">Once</option>
+                                    <option value="D">Daily</option>
+                                    <option value="W">Weekly</option>
+                                    <option selected value="M">Monthly</option>
+                                    {% endif %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-3 col-form-label" for="priority">Priority</label>
+                            <div class="col-md-9">
+                                <input class="form-control" type="number" name="priority" value="{{form.instance.priority}}" min="1" id="priority">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-3 col-form-label" for="language">Assigned to all</label>
+                            <div class="col-md-9">
+                                <select class="form-control" id="to_all" name="to_all" required>
+                                    {% if form.instance.assigned_to_all %}
+                                    <option selected value="yes">Yes</option>
+                                    <option value="no">No</option>
+                                    {% else %}
+                                    <option value="yes">Yes</option>
+                                    <option selected value="no">No</option>
                                     {% endif %}
                                 </select>
                             </div>

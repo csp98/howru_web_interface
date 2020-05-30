@@ -7,11 +7,12 @@ from howru_models.models import Question
 
 class QuestionForm(ModelForm):
     privacy = forms.CharField()
+    to_all = forms.CharField()
     responses_field = forms.CharField()
 
     class Meta:
         model = Question
-        fields = ["text", "public", "language"]
+        fields = ["text", "public", "language", "priority", "frequency"]
 
     def clean(self):
         cd = self.cleaned_data
@@ -27,3 +28,4 @@ class QuestionForm(ModelForm):
         self.cleaned_data['responses'] = response_list
         privacy = cd.get("privacy")
         self.cleaned_data['public'] = privacy == "Public"
+        self.cleaned_data['assigned_to_all'] = self.cleaned_data['to_all'] == "yes"

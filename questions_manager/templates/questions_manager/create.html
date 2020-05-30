@@ -48,7 +48,7 @@
                         <div class="form-group row">
                             <label class="col-md-3 col-form-label" for="privacy">Privacy</label>
                             <div class="col-md-9">
-                                <select required class="form-control" id="privacy" name="privacy" >
+                                <select class="form-control" id="privacy" name="privacy" required>
                                     <option value="">Please select</option>
                                     <option value="Public">Public</option>
                                     <option value="Private">Private</option>
@@ -58,10 +58,38 @@
                         <div class="form-group row">
                             <label class="col-md-3 col-form-label" for="language">Language</label>
                             <div class="col-md-9">
-                                <select required class="form-control" id="language" name="language">
+                                <select class="form-control" id="language" name="language" required>
                                     <option value="">Please select</option>
                                     <option value="GB">English</option>
                                     <option value="ES">Spanish</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-3 col-form-label" for="frequency">Frequency</label>
+                            <div class="col-md-9">
+                                <select class="form-control" id="frequency" name="frequency" required>
+                                    <option value="">Please select</option>
+                                    <option value="O">Once</option>
+                                    <option value="D">Daily</option>
+                                    <option value="W">Weekly</option>
+                                    <option value="M">Monthly</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-3 col-form-label" for="priority">Priority</label>
+                            <div class="col-md-9">
+                                <input class="form-control" id="priority" name="priority" min="1" type="number" value="1">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-3 col-form-label" for="to_all">Assigned to all my patients</label>
+                            <div class="col-md-9">
+                                <select class="form-control" id="to_all" name="to_all" required>
+                                    <option value="">Please select</option>
+                                    <option value="yes">Yes</option>
+                                    <option value="no">No</option>
                                 </select>
                             </div>
                         </div>

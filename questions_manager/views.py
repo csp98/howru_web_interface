@@ -6,7 +6,7 @@ from django.conf import settings
 
 # Create your views here.
 from .forms import QuestionForm
-from .models import Question, Doctor
+from .models import Question, Doctor, PendingQuestion
 
 
 @login_required(login_url="/login/")
@@ -16,10 +16,20 @@ def create(request):
         form = QuestionForm(request.POST)
         if form.is_valid():
             form.instance.responses = form.cleaned_data.get('responses')
+            form.instance.assigned_to_all = form.cleaned_data.get('assigned_to_all')
             form.instance.creator = request.user.doctor
             form.save()
             request.user.doctor.assigned_questions.add(form.instance)
             request.session['message'] = "Question has been successfully created"
+            # If assigned to all, assign it to all doctor's patients
+            if form.instance.assigned_to_all:
+                all_patients = request.user.doctor.patient_set.all()
+                for patient in all_patients:
+                    pending_question = PendingQuestion(doctor=request.user.doctor,
+                                                       question=form.instance,
+                                                       patient=patient,
+                                                       answering=False)
+                    pending_question.save()
             page = request.session.pop('my_questions_page', 1)
             return redirect(f'/questions_manager/my_questions?page={page}')
     else:
@@ -53,7 +63,7 @@ def my_questions(request):
 def public_questions(request):
     doctor = Doctor.objects.get(user=request.user)
     all_questions = Question.objects.filter(Q(public=True)
-    ).order_by('text')
+                                            ).order_by('text')
     page = request.GET.get('page', 1)
     paginator = Paginator(all_questions, settings.PAGE_SIZE)
     try:
@@ -75,7 +85,7 @@ def assign(request, question_id):
     question = Question.objects.get(id=question_id)
     question.doctor_set.add(request.user.doctor)
     question.save()
-    #request.session['message'] = "Question has been successfully modified"
+    # request.session['message'] = "Question has been successfully modified"
     page = request.session.pop('public_questions_page', 1)
     return redirect(f'/questions_manager/public_questions?page={page}')
 
@@ -98,8 +108,26 @@ def modify(request, question_id):
         form = QuestionForm(request.POST, instance=Question.objects.get(id=question_id))
         if form.is_valid():
             form.instance.responses = form.cleaned_data.get('responses')
+            form.instance.assigned_to_all = form.cleaned_data.get('assigned_to_all')
             form.save()
             request.session['message'] = "Question has been successfully modified"
+            # If assigned to all is checked, assign it to all patients
+            if form.instance.assigned_to_all:
+                all_patients = request.user.doctor.patient_set.all()
+                for patient in all_patients:
+                    PendingQuestion.objects.get_or_create(doctor=request.user.doctor,
+                                                          question=form.instance,
+                                                          patient=patient,
+                                                          answering=False)
+            # Otherwise, remove it from all patients
+            else:
+                all_patients = request.user.doctor.patient_set.all()
+                for patient in all_patients:
+                    PendingQuestion.objects.filter(doctor=request.user.doctor,
+                                                   question=form.instance,
+                                                   patient=patient
+                                                   ).delete()
+
             page = request.session.pop('my_questions_page', 1)
             return redirect(f'/questions_manager/my_questions?page={page}')
     else:
