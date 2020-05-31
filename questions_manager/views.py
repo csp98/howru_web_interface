@@ -1,16 +1,19 @@
+from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-from django.db.models import Q
 from django.shortcuts import render, redirect
-from django.conf import settings
 
 # Create your views here.
 from .forms import QuestionForm
-from .models import Question, Doctor, PendingQuestion
+from .models import Question, PendingQuestion
 
 
 @login_required(login_url="/login/")
 def create(request):
+    """
+    Form to create a question.
+    If it is assigned to all, creates the proper PendingQuestion entries.
+    """
     if request.method == 'POST':
         # Create a form instance and populate it with data from the request (binding):
         form = QuestionForm(request.POST)
@@ -42,6 +45,9 @@ def create(request):
 
 @login_required(login_url="/login/")
 def my_questions(request):
+    """
+    Shows request's doctor questions.
+    """
     if 'search' in request.GET:
         term = request.GET['search']
         all_questions = request.user.doctor.assigned_questions.filter(text__icontains=term).order_by('text')
@@ -65,9 +71,13 @@ def my_questions(request):
 
 @login_required(login_url="/login/")
 def public_questions(request):
+    """
+    Shows public questions inside the system.
+    """
     if 'search' in request.GET:
         term = request.GET['search']
-        all_questions = request.user.doctor.assigned_questions.filter(text__icontains=term, public=True).order_by('text')
+        all_questions = request.user.doctor.assigned_questions.filter(text__icontains=term, public=True).order_by(
+            'text')
     else:
         all_questions = request.user.doctor.assigned_questions.filter(public=True).order_by('text')
     page = request.GET.get('page', 1)
@@ -88,6 +98,11 @@ def public_questions(request):
 
 @login_required(login_url="/login/")
 def assign(request, question_id):
+    """
+    Assigns a question to the request's doctor.
+    If it is assigned to all, assigns it to all the patients.
+    :param question_id (int)
+    """
     question = Question.objects.get(id=question_id)
     question.doctor_set.add(request.user.doctor)
     question.save()
@@ -105,6 +120,12 @@ def assign(request, question_id):
 
 @login_required(login_url="/login/")
 def delete(request, question_id):
+    """
+    Deletes a question from the request's doctor.
+    If the doctor is the creator, it also removes it from the system.
+    :param question_id (int)
+    :return:
+    """
     question = Question.objects.get(id=question_id)
     context = {"question": question}
     if request.method == "POST":
@@ -117,6 +138,11 @@ def delete(request, question_id):
 
 @login_required(login_url="/login/")
 def modify(request, question_id):
+    """
+    Modifies a question.
+    It will create or remove the proper PendingQuestion entries depending on the 'assigned_to_all' flag.
+    :param question_id (int)
+    """
     if request.method == "POST":
         form = QuestionForm(request.POST, instance=Question.objects.get(id=question_id))
         if form.is_valid():

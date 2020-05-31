@@ -1,19 +1,28 @@
 import csv
 import os
 
+from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from django.conf import settings
-# Create your views here.
 
 from howru_models.models import Patient, PendingQuestion
 from patients_manager.forms import AssignPatientForm, ExportForm
 
 
+# Create your views here.
+
+
 @login_required(login_url="/login/")
 def index(request):
+    """
+    Shows all assigned patients from the request's doctor. Allows pagination.
+    Available options:
+        - View data
+        - Assign questions
+        - Delete patient
+    """
     doctor = request.user.doctor
     if 'search' in request.GET:
         term = request.GET['search']
@@ -38,6 +47,11 @@ def index(request):
 
 @login_required(login_url="/login/")
 def assign(request):
+    """
+    Assigns a patient to the request's doctor.
+    Required param: username.
+    Data clean: remove @ and case insensitive.
+    """
     not_found = False
     if request.method == "POST":
         form = AssignPatientForm(request.POST)
@@ -61,6 +75,10 @@ def assign(request):
 
 @login_required(login_url="/login/")
 def unassign(request, patient_id):
+    """
+    Removes a patient from request's doctor assigned patients
+    :param patient_id (int)
+    """
     patient = Patient.objects.get(identifier=patient_id)
     context = {"patient": patient}
     if request.method == "POST":
@@ -73,6 +91,12 @@ def unassign(request, patient_id):
 
 @login_required(login_url="/login/")
 def assign_questions(request, patient_id):
+    """
+    Shows request's doctor questions that can be assigned to the patient.
+    Avaliable options:
+        - Assign/Unassign questions
+    :param patient_id (int):
+    """
     all_questions = request.user.doctor.assigned_questions.all().order_by('text')
     page = request.GET.get('page', 1)
     paginator = Paginator(all_questions, settings.PAGE_SIZE)
@@ -93,6 +117,11 @@ def assign_questions(request, patient_id):
 
 @login_required(login_url="/login/")
 def assign_question_to_patient(request, question_id, patient_id):
+    """
+    Assigns a question to a patient bu creating a PendingQuestion
+    :param question_id (int)
+    :param patient_id (int)
+    """
     pending_question = PendingQuestion(doctor=request.user.doctor,
                                        question_id=question_id,
                                        patient_id=patient_id,
@@ -105,6 +134,11 @@ def assign_question_to_patient(request, question_id, patient_id):
 
 @login_required(login_url="/login/")
 def unassign_question_to_patient(request, question_id, patient_id):
+    """
+    Unassigns a question to a patient by removing the corresponding PendingQuestion
+    :param question_id (int)
+    :param patient_id (int)
+    """
     pending_question = PendingQuestion.objects.get(doctor=request.user.doctor, question_id=question_id,
                                                    patient_id=patient_id)
     pending_question.delete()
@@ -115,6 +149,10 @@ def unassign_question_to_patient(request, question_id, patient_id):
 
 @login_required(login_url="/login/")
 def view_data(request, patient_id):
+    """
+    Shows answered questions data from a patient.
+    :param patient_id (int):
+    """
     answered_questions_set = Patient.objects.get(identifier=patient_id).answeredquestion_set
     list_of_questions = dict()
     for answered_question in answered_questions_set.all():
@@ -139,6 +177,13 @@ def view_data(request, patient_id):
 
 
 def create_csv(patients, file_path, start_date, end_date):
+    """
+    Creates a CSV file with patients data
+    :param patients (list)
+    :param file_path (str)
+    :param start_date (datetime)
+    :param end_date (datetime)
+    """
     with open(file_path, 'w') as csv_file:
         writer = csv.writer(csv_file)
         writer.writerow(["Patient username", "Question", "Answer", "Date"])
@@ -150,6 +195,13 @@ def create_csv(patients, file_path, start_date, end_date):
 
 
 def patients_to_csv(patients, doctor, start_date, end_date):
+    """
+    Creates a CSV file with patients data and sends it to the user.
+    :param patients (list)
+    :param doctor (doctor)
+    :param start_date (datetime)
+    :param end_date (datetime)
+    """
     filename = f'patients_{doctor}.csv'
     file_path = os.path.join(settings.CSV_DIR, filename)
     create_csv(patients, file_path, start_date, end_date)
@@ -161,6 +213,10 @@ def patients_to_csv(patients, doctor, start_date, end_date):
 
 @login_required(login_url="/login/")
 def export(request):
+    """
+    Allows to select desired patients and start/end date to download a CSV file with all the information
+    (patient name, question, answer and date)
+    """
     if request.method == "POST":
         form = ExportForm(request.user.doctor, request.POST)
         if form.is_valid():

@@ -63,81 +63,21 @@
                                     <h5 style="text-align: center">Answers per hour (%)</h5>
                                 </div>
                                 <hr class="mt-0">
+                                {% for key, value in answers_per_hour.items %}
                                 <div class="progress-group mb-4">
                                     <div class="progress-group-prepend"><span
-                                            class="progress-group-text">00:00-03:59</span>
+                                            class="progress-group-text">{{key}}</span>
                                     </div>
                                     <div class="progress-group-bars">
                                         <div class="progress progress-xl">
                                             <div aria-valuemax="100" aria-valuemin="0"
                                                  class="progress-bar progress-bar-striped progress-bar-animated bg-warning"
                                                  role="progressbar"
-                                                 style="width: {{answers_per_hour.0}}%"></div>
+                                                 style="width: {{value}}%"></div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="progress-group mb-4">
-                                    <div class="progress-group-prepend"><span
-                                            class="progress-group-text">04:00-07:59</span>
-                                    </div>
-                                    <div class="progress-group-bars">
-                                        <div class="progress progress-xl">
-                                            <div aria-valuemax="100" aria-valuemin="0" aria-valuenow="34"
-                                                 class="progress-bar progress-bar-striped progress-bar-animated bg-warning"
-                                                 role="progressbar"
-                                                 style="width: {{answers_per_hour.1}}%"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="progress-group mb-4">
-                                    <div class="progress-group-prepend"><span
-                                            class="progress-group-text">08:00-11:59</span></div>
-                                    <div class="progress-group-bars">
-                                        <div class="progress progress-xl">
-                                            <div aria-valuemax="100" aria-valuemin="0" aria-valuenow="34"
-                                                 class="progress-bar progress-bar-striped progress-bar-animated bg-warning"
-                                                 role="progressbar"
-                                                 style="width: {{answers_per_hour.2}}%"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="progress-group mb-4">
-                                    <div class="progress-group-prepend"><span
-                                            class="progress-group-text">12:00-15:59</span></div>
-                                    <div class="progress-group-bars">
-                                        <div class="progress progress-xl">
-                                            <div aria-valuemax="100" aria-valuemin="0" aria-valuenow="34"
-                                                 class="progress-bar progress-bar-striped progress-bar-animated bg-warning"
-                                                 role="progressbar"
-                                                 style="width: {{answers_per_hour.3}}%"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="progress-group mb-4">
-                                    <div class="progress-group-prepend"><span
-                                            class="progress-group-text">16:00-19:59</span>
-                                    </div>
-                                    <div class="progress-group-bars">
-                                        <div class="progress progress-xl">
-                                            <div aria-valuemax="100" aria-valuemin="0" aria-valuenow="34"
-                                                 class="progress-bar progress-bar-striped progress-bar-animated bg-warning"
-                                                 role="progressbar"
-                                                 style="width: {{answers_per_hour.4}}%"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="progress-group mb-4">
-                                    <div class="progress-group-prepend"><span
-                                            class="progress-group-text">20:00-23:59</span></div>
-                                    <div class="progress-group-bars">
-                                        <div class="progress progress-xl">
-                                            <div aria-valuemax="100" aria-valuemin="0" aria-valuenow="34"
-                                                 class="progress-bar progress-bar-striped progress-bar-animated bg-warning"
-                                                 role="progressbar"
-                                                 style="width: {{answers_per_hour.5}}%"></div>
-                                        </div>
-                                    </div>
-                                </div>
+                                {% endfor %}
                             </div>
                             <!-- /.col-->
                             <div class="col-sm-6">
@@ -256,7 +196,6 @@
                                 </td>
                             </tr>
                             {% endfor %}
-
                             </tbody>
                         </table>
                         {% endif %}

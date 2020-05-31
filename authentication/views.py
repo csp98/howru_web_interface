@@ -3,7 +3,6 @@
 License: MIT
 Copyright (c) 2019 - present AppSeed.us
 """
-from django.contrib import messages
 from django.contrib.auth import authenticate, login, update_session_auth_hash
 # Create your views here.
 from django.contrib.auth.decorators import login_required
@@ -51,6 +50,9 @@ def register_user(request):
 
 @login_required(login_url="/login/")
 def change_password(request):
+    """
+    Allows an user to change his/her password
+    """
     success = False
     if request.method == 'POST':
         form = PasswordChangeForm(request.user, request.POST)

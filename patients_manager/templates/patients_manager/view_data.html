@@ -126,16 +126,10 @@
 
     /***************** Pie chart *************************/
 
-    var colors = ['#FF6384', '#36A2EB', '#FFCE56'];
+    var colors = ['#FF6384', '#36A2EB', '#FFCE56', '#c77de7'];
     if (colors.length < values.length) {
-        for (i = 0; i < values.length - colors.length; i++) {
-            r = Math.floor(Math.random() * 200);
-            g = Math.floor(Math.random() * 200);
-            b = Math.floor(Math.random() * 200);
-            v = Math.floor(Math.random() * 500);
-            c = 'rgba(' + r + ', ' + g + ', ' + b + ', 0.5)';
-            h = 'rgba(' + (r + 20) + ', ' + (g + 20) + ', ' + (b + 20) + ', 0.5)';
-            colors.push(c);
+        for (i = 0; i < values.length - colors.length + 1; i++) {
+            colors.push('#'+(Math.random()*0xFFFFFF<<0).toString(16));
         }
     }
     new Chart(document.getElementById('{{question}}_pie'), {

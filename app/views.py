@@ -5,31 +5,27 @@ Copyright (c) 2019 - present AppSeed.us
 """
 
 import pytz
-from django import template
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count
-from django.http import HttpResponse
 from django.shortcuts import render
-from django.template import loader
 from django.utils import timezone
 
-from howru_models.models import AnsweredQuestion, Question, Patient
+from howru_models.models import AnsweredQuestion, Question
 
 
 def get_total_answers(doctor):
-    total_answers = 0
-    for patient in doctor.patient_set.all():
-        total_answers += AnsweredQuestion.objects.filter(doctor=doctor, patient=patient).count()
-    return total_answers
+    """
+    Retrieves total answers of doctor's assigned patients.
+    :param doctor (doctor)
+    """
+    return AnsweredQuestion.objects.filter(doctor=doctor).count()
 
 
 def get_top_patients(doctor):
-    """ #TODO it gets the latest answers
+    """
     Retrieves the 5 users with most answered questions
     """
-    top_patients = (
-        doctor.patient_set.annotate(num_ans=Count('answeredquestion')).order_by('-num_ans')[:5]
-    )
+    top_patients = doctor.patient_set.annotate(num_ans=Count('answeredquestion')).order_by('-num_ans')[:5]
     result = [
         (patient, patient.num_ans) for patient in top_patients
     ]
@@ -37,6 +33,11 @@ def get_top_patients(doctor):
 
 
 def get_gender_stats(doctor, total_patients):
+    """
+    Gets percentages about patient's gender with 2 decimals
+    :param doctor (doctor)
+    :param total_patients (int)
+    """
     if not total_patients:
         male_percentage = female_percentage = other_percentage = 0
     else:
@@ -52,7 +53,7 @@ def get_gender_stats(doctor, total_patients):
 def get_answers_per_hour(doctor):
     """
     Gets the percentage of answers depending on the hour
-    :param doctor:
+    :param doctor (doctor)
     :return (list): 0-3:59, 4:00-7:59, 8:00-11:59, 12:00-15:59, 16:00-19:59, 20:00-23:59
     """
     timezone.activate(pytz.timezone('Europe/Madrid'))
@@ -71,12 +72,25 @@ def get_answers_per_hour(doctor):
                                         answer_date__hour__lt=24).count()
     ]
     total = sum(number_of_answers)
-    percentages = [round(number * 100 / total, 2) for number in number_of_answers] if total else 0
-    return percentages
+    percentages = [round(number * 100 / total, 2) for number in number_of_answers] if total else None
+
+    result = {
+        "00:00-03:59": percentages[0],
+        "04:00-07:59": percentages[1],
+        "08:00-11:59": percentages[2],
+        "12:00-15:59": percentages[3],
+        "16:00-19:59": percentages[4],
+        "20:00-23:59": percentages[5]
+    } if percentages else None
+    return result
 
 
 @login_required(login_url="/login/")
 def index(request):
+    """
+    Shows the index page, including global parameters
+    (top patients, number of associated patients, answers, gender and time percentages, etc.)
+    """
     doctor = request.user.doctor
     top_patients = get_top_patients(doctor)
     doctor_patients = doctor.patient_set
@@ -97,22 +111,3 @@ def index(request):
         "answers_per_hour": answers_per_hour
     }
     return render(request, "index.html", context)
-
-
-@login_required(login_url="/login/")
-def pages(request):
-    context = {}
-    # All resource paths end in .html.
-    # Pick out the html file name from the url. And load that template.
-    try:
-        load_template = request.path.split('/')[-1]
-        html_template = loader.get_template(load_template)
-        return HttpResponse(html_template.render(context, request))
-
-    except template.TemplateDoesNotExist:
-        html_template = loader.get_template('error-404.html')
-        return HttpResponse(html_template.render(context, request))
-
-    except:
-        html_template = loader.get_template('error-500.html')
-        return HttpResponse(html_template.render(context, request))

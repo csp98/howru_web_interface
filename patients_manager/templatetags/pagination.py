@@ -7,6 +7,10 @@ register = template.Library()
 
 @register.filter
 def paginate(paginator, current):
+    """
+    Construct a proper pagination menu
+    https://medium.com/@sumitlni/paginate-properly-please-93e7ca776432
+    """
     num_pages = settings.PAGE_SIZE
     if paginator.num_pages > 2 * num_pages:
         start = max(1, current - num_pages)

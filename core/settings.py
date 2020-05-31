@@ -5,7 +5,7 @@ Copyright (c) 2019 - present AppSeed.us
 """
 import json
 import os
-
+from .key import KEY
 from unipath import Path
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -13,7 +13,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PROJECT_DIR = Path(__file__).parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'S#perS3crEt_1122'
+SECRET_KEY = KEY
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -145,5 +145,3 @@ STATICFILES_DIRS = (
 PAGE_SIZE = 5
 
 CSV_DIR = BASE_DIR + "/patients_manager/csv"
-
-TIME_ZONE = 'Europe/Madrid'
