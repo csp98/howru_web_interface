@@ -10,7 +10,7 @@
             <h5 style="text-align: center">Answered questions from patient {{ patient }}</h5>
             {% for question, _ in list_of_questions.items %}
             <div class="card">
-                <div class="card-header">
+                <div class="card-header text-center">
                     {{question}}
                 </div>
                 <div class="card-body" id="cardbody">
@@ -40,44 +40,42 @@
 <script src="/static/assets/vendors/@coreui/coreui-chartjs/js/coreui-chartjs.bundle.js"></script>
 <script>
 
-charts = {}
 {% for question, question_data in list_of_questions.items %}
+    responses_json = {{question_data.responses | safe}};
+    dates_json = {{question_data.dates | safe}};
+
+    // Variables creation
     responses = [];
     values = [];
     data = [];
-    responses_json = {{question_data.responses|safe}};
-    for ( let r in responses_json) {
-        responses.push(r);
-        values.push(responses_json[r]);
-    }
-    dates = [];
-    var get_response_value = function(xValue, yValue) {
-      return {
-        x: dates.indexOf(xValue),
-        y: responses.indexOf(yValue)
-      };
-    };
-    dates_json = {{question_data.dates|safe}};
-    for ( let r in dates_json) {
-        dates.push(r);
-        data.push(get_response_value(r, dates_json[r]));
+    responses = Object.keys(responses_json);
+    values = Object.values(responses_json);
+
+    dates = Object.keys(dates_json);
+    for (let r in dates_json) {
+        data.push({
+            x: dates.indexOf(r),
+            y: responses.indexOf(dates_json[r])
+        });
     }
 
-    charts['{{question.question}}_bar'] = new Chart(document.getElementById('{{question}}_bar'), {
-      type: 'line',
-      data: {
-        xLabels: dates,
-        yLabels: responses,
-        datasets: [{
-          backgroundColor: 'rgba(1, 249, 31, 0.5)',
-          borderColor: 'rgba(0, 0, 0, 0.5)',
-          highlightFill: 'rgba(47, 0, 253, 0.5)',
-          highlightStroke: 'rgba(220, 220, 220, 0.5)',
-          data: data
-        }]
-      },
-      options: {
-          tooltips: {
+    /***************** Bar chart *************************/
+
+    new Chart(document.getElementById('{{question}}_bar'), {
+        type: 'line',
+        data: {
+            xLabels: dates,
+            yLabels: responses,
+            datasets: [{
+                backgroundColor: 'rgba(1, 249, 31, 0.5)',
+                borderColor: 'rgba(0, 0, 0, 0.5)',
+                highlightFill: 'rgba(47, 0, 253, 0.5)',
+                highlightStroke: 'rgba(220, 220, 220, 0.5)',
+                data: data
+            }]
+        },
+        options: {
+            tooltips: {
                 callbacks: {
                     label: function(tooltipItem, data) {
                         return responses[tooltipItem.yLabel];
@@ -86,70 +84,75 @@ charts = {}
                         return dates[tooltipItem[0].xLabel]
                     },
                 }
-        },
-        legend: {
-            "display": false
-        },
-        responsive: true,
-        scales: {
-          xAxes: [{
-            type: 'linear',
-            position: 'bottom',
-            scaleLabel: {
-              display: true,
-              labelString: 'Date'
             },
-            ticks: {
-              min: 0,
-              max: dates.length - 1,
-              maxTicksLimit: 20,
-              stepSize: 1,
-              callback: function(value) {
-                return dates[value];
-              },
+            legend: {
+                "display": false
             },
-          }],
-          yAxes: [{
-            scaleLabel: {
-              display: true,
-              labelString: 'Answer'
-            },
-            ticks: {
-              min: 0,
-              max: responses.length - 1,
-              callback: function(value) {
-                return responses[value];
-              },
-            },
-          }]
-    }
-      }
+            responsive: true,
+            scales: {
+                xAxes: [{
+                    type: 'linear',
+                    position: 'bottom',
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Date'
+                    },
+                    ticks: {
+                        min: 0,
+                        max: dates.length - 1,
+                        maxTicksLimit: 20,
+                        stepSize: 1,
+                        callback: function(value) {
+                            return dates[value];
+                        },
+                    },
+                }],
+                yAxes: [{
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Answer'
+                    },
+                    ticks: {
+                        min: 0,
+                        max: responses.length - 1,
+                        callback: function(value) {
+                            return responses[value];
+                        },
+                    },
+                }]
+            }
+        }
     });
-    /////////// PIE CHART //////////////////////////
 
-    charts['{{question.question}}_pie'] = new Chart(document.getElementById('{{question}}_pie'), {
-      type: 'pie',
-      data: {
-        labels: responses,
-        datasets: [{
-          data: values,
-          backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
-          hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56']
-        }]
-      },
-      options: {
-        responsive: true
-      },
+    /***************** Pie chart *************************/
 
+    var colors = ['#FF6384', '#36A2EB', '#FFCE56'];
+    if (colors.length < values.length) {
+        for (i = 0; i < values.length - colors.length; i++) {
+            r = Math.floor(Math.random() * 200);
+            g = Math.floor(Math.random() * 200);
+            b = Math.floor(Math.random() * 200);
+            v = Math.floor(Math.random() * 500);
+            c = 'rgba(' + r + ', ' + g + ', ' + b + ', 0.5)';
+            h = 'rgba(' + (r + 20) + ', ' + (g + 20) + ', ' + (b + 20) + ', 0.5)';
+            colors.push(c);
+        }
+    }
+    new Chart(document.getElementById('{{question}}_pie'), {
+        type: 'pie',
+        data: {
+            labels: responses,
+            datasets: [{
+                data: values,
+                backgroundColor: colors,
+                hoverBackgroundColor: colors
+            }]
+        },
+        options: {
+            responsive: true
+        },
     });
 {% endfor %}
-
-
-
-
-
-
-
 
 
 </script>
