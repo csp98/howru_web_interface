@@ -63,6 +63,14 @@ def assign(request):
                     request.session['message'] = f'Patient {username} is already in your patients'
                 else:
                     request.user.doctor.patient_set.add(patient)
+                    # Assign assigned_to_all questions
+                    questions = request.user.doctor.assigned_questions.filter(assigned_to_all=True)
+                    for question in questions:
+                        pending = PendingQuestion(doctor=request.user.doctor,
+                                                  question=question,
+                                                  patient=patient,
+                                                  answering=False)
+                        pending.save()
                     request.session['message'] = f'Patient {username} has been successfully added'
                 page = request.session.pop('patients_page', 1)
                 return redirect(f'/patients_manager?page={page}')
