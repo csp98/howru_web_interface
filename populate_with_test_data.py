@@ -56,7 +56,7 @@ for patient in patients:
                                         patient=patient,
                                         answer_date=datetime.now(pytz.timezone('Europe/Madrid')).replace(
                                             hour=random.randint(0, 23), minute=random.randint(0, 59),
-                                            day=j, month=3),
+                                            day=j, month=random.randint(1,12)),
                                         response=random.choice(
                                             ["response 1", "response 2", "response 3", "response 4"]))
             answered.save()

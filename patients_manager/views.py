@@ -125,7 +125,8 @@ def view_data(request, patient_id):
                     'answer_date'):
                 dates[r.answer_date.strftime("%d-%m-%y")] = r.response
             for response in answered_question.question.responses:
-                responses[response] = answered_questions_set.filter(response=response).count()
+                responses[response] = answered_questions_set.filter(response=response,
+                                                                    question=answered_question.question).count()
             list_of_questions[answered_question.question] = {
                 "dates": dates,
                 'responses': responses
