@@ -143,3 +143,7 @@ STATICFILES_DIRS = (
 #############################################################
 #############################################################
 PAGE_SIZE = 5
+
+CSV_DIR = BASE_DIR + "/patients_manager/csv"
+
+TIME_ZONE = 'Europe/Madrid'

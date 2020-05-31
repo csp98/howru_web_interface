@@ -9,9 +9,64 @@
     <div class="col-lg-12">
         <div class="card">
             <div class="card-body">
-            EXPORT PAGE
-                form to select patients and dates
-                generate csv
+                <div>
+                    <div class="col-sm-12 input">
+                        {% if form.errors %}
+                        {% for field in form %}
+                        {% for error in field.errors %}
+                        <div class="alert alert-danger">
+                            <strong>{{ error|escape }}</strong>
+                        </div>
+                        {% endfor %}
+                        {% endfor %}
+                        {% for error in form.non_field_errors %}
+                        <div class="alert alert-danger">
+                            <strong>{{ error|escape }}</strong>
+                        </div>
+                        {% endfor %}
+                        {% endif %}
+                        <form enctype='multipart/form-data' method="post">
+                            {% csrf_token %}
+                            <div class="form-group row">
+                                <label class="col-md-3 col-form-label" for="patients">Select patients to
+                                    export</label>
+                                <div class="col-md-9">
+                                    <select class="form-control" id="patients" multiple=""
+                                            name="patients"
+                                            required size="10">
+                                        {% for patient in form.fields.patients.choices %}
+                                        <option value="{{patient.0}}">{{patient.1}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-3 col-form-label" for="start_date">Start date</label>
+                                <div class="col-md-9">
+                                    <input class="form-control" id="start_date" name="start_date" placeholder="date"
+                                           required type="date">
+                                    <span
+                                            class="help-block">Please enter a valid date
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-3 col-form-label" for="end_date">End date</label>
+                                <div class="col-md-9">
+                                    <input class="form-control" id="end_date" name="end_date" placeholder="date"
+                                           required type="date">
+                                    <span
+                                            class="help-block">Please enter a valid date
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="text-center">
+                                <button class="btn btn-sm btn-primary" name="login" type="submit">Submit</button>
+                                <button class="btn btn-sm btn-danger" type="reset"> Reset</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

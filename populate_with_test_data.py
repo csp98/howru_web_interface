@@ -15,7 +15,7 @@ doctor = User.objects.get(username='data_populator').doctor
 questions = list()
 patients = list()
 # Create question
-for i in range(5):
+for i in range(20):
     # Questions
     question = Question(responses=["response 1", "response 2", "response 3", "response 4"],
                         text=f'This is test question number {i}',
@@ -38,6 +38,7 @@ for i in range(5):
     patient.save()
     patients.append(patient)
     doctor.patient_set.add(patient)
+    doctor.save()
 
 # Journal entries for each patient
 for patient in patients:
@@ -59,5 +60,4 @@ for patient in patients:
                                         response=random.choice(
                                             ["response 1", "response 2", "response 3", "response 4"]))
             answered.save()
-doctor.save()
 print("Finished")

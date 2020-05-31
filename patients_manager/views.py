@@ -1,10 +1,15 @@
+import csv
+import os
+
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.conf import settings
 # Create your views here.
-from howru_models.models import Patient, Doctor, PendingQuestion
-from patients_manager.forms import AssignPatientForm
+
+from howru_models.models import Patient, PendingQuestion
+from patients_manager.forms import AssignPatientForm, ExportForm
 
 
 @login_required(login_url="/login/")
@@ -116,9 +121,9 @@ def view_data(request, patient_id):
         if answered_question.question not in list_of_questions.keys():
             responses = dict()
             dates = dict()
-            for r in answered_questions_set.filter(question__text=answered_question.question.text).order_by('answer_date'):
+            for r in answered_questions_set.filter(question__text=answered_question.question.text).order_by(
+                    'answer_date'):
                 dates[r.answer_date.strftime("%d-%m-%y")] = r.response
-            print(dates)
             for response in answered_question.question.responses:
                 responses[response] = answered_questions_set.filter(response=response).count()
             list_of_questions[answered_question.question] = {
@@ -131,8 +136,43 @@ def view_data(request, patient_id):
     }
     return render(request, 'patients_manager/view_data.html', context)
 
+
+def create_csv(patients, file_path, start_date, end_date):
+    with open(file_path, 'w') as csv_file:
+        writer = csv.writer(csv_file)
+        writer.writerow(["Patient username", "Question", "Answer", "Date"])
+        for patient in patients:
+            for answered_question in patient.answeredquestion_set.filter(answer_date__lte=end_date,
+                                                                         answer_date__gte=start_date):
+                writer.writerow(
+                    [patient, answered_question.question, answered_question.response, answered_question.answer_date])
+
+
+def patients_to_csv(patients, doctor, start_date, end_date):
+    filename = f'patients_{doctor}.csv'
+    file_path = os.path.join(settings.CSV_DIR, filename)
+    create_csv(patients, file_path, start_date, end_date)
+    with open(file_path, 'rb') as file:
+        response = HttpResponse(file.read(), content_type="application/vnd.ms-excel")
+        response['Content-Disposition'] = 'inline; filename=' + filename
+        return response, file_path
+
+
 @login_required(login_url="/login/")
 def export(request):
-
-    context = {}
+    if request.method == "POST":
+        form = ExportForm(request.user.doctor, request.POST)
+        if form.is_valid():
+            # Export file
+            patients = form.cleaned_data.get('patients')
+            start_date = form.cleaned_data.get('start_date')
+            end_date = form.cleaned_data.get('end_date')
+            patients, path = patients_to_csv(patients, request.user.doctor, start_date, end_date)
+            os.remove(path)
+            return patients
+    else:
+        form = ExportForm(request.user.doctor)
+    context = {
+        'form': form,
+    }
     return render(request, 'patients_manager/export.html', context)
