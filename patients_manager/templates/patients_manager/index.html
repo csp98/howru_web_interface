@@ -136,13 +136,6 @@
                     <li class="page-item"><a class="page-link"
                                              href="?{% get_url request 'page' 1 %}">⇤</a></li>
                     {% endif %}
-                    {% if patients.has_previous %}
-                    <li class="page-item"><a class="page-link"
-                                             href="?{% get_url request 'page' page_obj.previous_page_number %}">&laquo;</a>
-                    </li>
-                    {% else %}
-                    <li class="page-item"><a class="page-link disabled">&laquo;</a></li>
-                    {% endif %}
                     {% for i in patients.paginator|paginate:patients.number %}
                     {% if patients.number == i %}
                     <li class="page-item active"><a class="page-link" href="#">{{i}}</a></li>
@@ -150,18 +143,11 @@
                     <li class="page-item"><a class="page-link" href="?{% get_url request 'page' i %}">{{ i }}</a></li>
                     {% endif %}
                     {% endfor %}
-                    {% if patients.has_next %}
-                    <li class="page-item"><a class="page-link"
-                                             href="?{% get_url request 'page' page_obj.next_page_number %}">&raquo;</a>
-                    </li>
-                    {% else %}
-                    <li class="page-item"><a class="page-link disabled">&raquo;</a></li>
-                    {% endif %}
                     {% if patients.number == patients.paginator.num_pages %}
                     <li class="page-item"><a class="page-link disabled">⇥</a></li>
                     {% else %}
                     <li class="page-item"><a class="page-link"
-                                             href="?{% get_url request 'page' paginator.num_pages %}">⇥</a></li>
+                                             href="?{% get_url request 'page' patients.paginator.num_pages %}">⇥</a></li>
                     {% endif %}
                 </ul>
                 {% endif %}
