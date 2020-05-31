@@ -99,7 +99,7 @@
                     },
                     ticks: {
                         min: 0,
-                        max: dates.length - 1,
+                        max: dates.length,
                         maxTicksLimit: 20,
                         stepSize: 1,
                         callback: function(value) {
@@ -147,8 +147,6 @@
         },
     });
 {% endfor %}
-
-
 </script>
 
 {% endblock javascripts %}
