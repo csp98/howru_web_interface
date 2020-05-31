@@ -8,6 +8,23 @@
     <div class="fade-in">
         <div class="col-md-12">
             <h5 style="text-align: center">Answered questions from patient {{ patient }}</h5>
+            <div class="col-md-6" style="margin: 0 auto;float: none;margin-bottom: 10px;">
+                <form class="form-horizontal">
+                    {% csrf_token %}
+                    <div class="input-group">
+                        <input autocomplete="username" class="form-control" id="search" name="search"
+                               placeholder="Question text (empty to get all questions)"
+                               type="search">
+                        <span class="input-group-append">
+                            <button class="btn btn-primary" type="submit">
+                              <svg class="c-icon">
+                                <use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-magnifying-glass"></use>
+                              </svg> Search
+                            </button>
+                            </span>
+                    </div>
+                </form>
+            </div>
             {% for question, _ in list_of_questions.items %}
             <div class="card">
                 <div class="card-header text-center">
@@ -147,6 +164,7 @@
         },
     });
 {% endfor %}
+
 </script>
 
 {% endblock javascripts %}

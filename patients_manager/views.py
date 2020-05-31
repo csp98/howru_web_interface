@@ -161,7 +161,11 @@ def view_data(request, patient_id):
     Shows answered questions data from a patient.
     :param patient_id (int):
     """
-    answered_questions_set = Patient.objects.get(identifier=patient_id).answeredquestion_set
+    if 'search' in request.GET:
+        term = request.GET['search']
+        answered_questions_set = Patient.objects.get(identifier=patient_id).answeredquestion_set.filter(question__text__icontains=term)
+    else:
+        answered_questions_set = Patient.objects.get(identifier=patient_id).answeredquestion_set
     list_of_questions = dict()
     for answered_question in answered_questions_set.all():
         if answered_question.question not in list_of_questions.keys():
