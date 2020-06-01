@@ -1,5 +1,6 @@
 {% extends "layouts/base.html" %}
-
+{% load paginate from pagination %}
+{% load get_url from get_search_url %}
 {% block title %} Charts {% endblock %}
 
 {% block content %}
@@ -25,27 +26,51 @@
                     </div>
                 </form>
             </div>
-            {% for question, _ in list_of_questions.items %}
+            {% for question in questions %}
             <div class="card">
                 <div class="card-header text-center">
-                    {{question}}
+                    {{question.question__text}}
                 </div>
                 <div class="card-body" id="cardbody">
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="c-chart-wrapper">
-                                <canvas id="{{question}}_bar"></canvas>
+                                <canvas id="{{question.question}}_bar"></canvas>
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="c-chart-wrapper">
-                                <canvas id="{{question}}_pie"></canvas>
+                                <canvas id="{{question.question}}_pie"></canvas>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
             {% endfor %}
+            {{questions.has_other_pages}}
+            {% if questions.has_other_pages %}
+            <ul class="pagination" style="justify-content: center;">
+                {% if questions.number == 1 %}
+                <li class="page-item"><a class="page-link disabled">⇤</a></li>
+                {% else %}
+                <li class="page-item"><a class="page-link"
+                                         href="?{% get_url request 'page' 1 %}">⇤</a></li>
+                {% endif %}
+                {% for i in questions.paginator|paginate:questions.number %}
+                {% if questions.number == i %}
+                <li class="page-item active"><a class="page-link" href="#">{{i}}</a></li>
+                {% else %}
+                <li class="page-item"><a class="page-link" href="?{% get_url request 'page' i %}">{{ i }}</a></li>
+                {% endif %}
+                {% endfor %}
+                {% if questions.number == questions.paginator.num_pages %}
+                <li class="page-item"><a class="page-link disabled">⇥</a></li>
+                {% else %}
+                <li class="page-item"><a class="page-link"
+                                         href="?{% get_url request 'page' questions.paginator.num_pages %}">⇥</a></li>
+                {% endif %}
+            </ul>
+            {% endif %}
         </div>
     </div>
 </div>
@@ -58,21 +83,29 @@
 <script>
 
 {% for question, question_data in list_of_questions.items %}
-    responses_json = {{question_data.responses | safe}};
-    dates_json = {{question_data.dates | safe}};
-
+    responses_json = {{question_data.pie_data | safe}};
+    dates_json = {{question_data.line_data | safe}};
     // Variables creation
     responses = [];
     values = [];
     data = [];
-    responses = Object.keys(responses_json);
-    values = Object.values(responses_json);
+    responses = [];
+    values = [];
+    for (let r in responses_json) {
+        responses.push(responses_json[r]['response']);
+        values.push(responses_json[r]['n']);
+    }
 
-    dates = Object.keys(dates_json);
+    dates = [];
+    for (let r in dates_json) {
+        dates.push(dates_json[r]['date']);
+    }
+
+    //dates = Object.keys(dates_json);
     for (let r in dates_json) {
         data.push({
-            x: dates.indexOf(r),
-            y: responses.indexOf(dates_json[r])
+            x: dates.indexOf(dates_json[r]['date']),
+            y: responses.indexOf(dates_json[r]['response'])
         });
     }
 
@@ -164,6 +197,9 @@
         },
     });
 {% endfor %}
+
+
+
 
 </script>
 

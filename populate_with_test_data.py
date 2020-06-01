@@ -49,7 +49,7 @@ for patient in patients:
                                   patient=patient,
                                   answering=False)
         pending.save()
-        for j in range(1, 25):
+        for j in range(1, 28):
             # Answered questions
             answered = AnsweredQuestion(doctor=doctor,
                                         question=question,

@@ -4,6 +4,8 @@ import os
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.db.models import Count, CharField, Value
+from django.db.models.functions import Cast, ExtractDay, ExtractMonth, ExtractYear, Concat
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
@@ -161,27 +163,41 @@ def view_data(request, patient_id):
     Shows answered questions data from a patient.
     :param patient_id (int):
     """
+    answered_set = Patient.objects.get(identifier=patient_id).answeredquestion_set
     if 'search' in request.GET:
         term = request.GET['search']
-        answered_questions_set = Patient.objects.get(identifier=patient_id).answeredquestion_set.filter(question__text__icontains=term)
+        all_questions = answered_set.filter(question__text__icontains=term).values('question',
+                                                                                   'question__text').annotate(
+            n=Count('response')).order_by('question')
     else:
-        answered_questions_set = Patient.objects.get(identifier=patient_id).answeredquestion_set
+        all_questions = answered_set.values('question', 'question__text').annotate(n=Count('response')).order_by(
+            'question')
+
+    page = request.GET.get('page', 1)
+    paginator = Paginator(all_questions, settings.PAGE_SIZE)
+    try:
+        questions = paginator.page(page)
+    except PageNotAnInteger:
+        questions = paginator.page(1)
+    except EmptyPage:
+        questions = paginator.page(paginator.num_pages)
     list_of_questions = dict()
-    for answered_question in answered_questions_set.all():
-        if answered_question.question not in list_of_questions.keys():
-            responses = dict()
-            dates = dict()
-            for r in answered_questions_set.filter(question__text=answered_question.question.text).order_by(
-                    'answer_date'):
-                dates[r.answer_date.strftime("%d-%m-%y")] = r.response
-            for response in answered_question.question.responses:
-                responses[response] = answered_questions_set.filter(response=response,
-                                                                    question=answered_question.question).count()
-            list_of_questions[answered_question.question] = {
-                "dates": dates,
-                'responses': responses
-            }
+    for question in questions:
+        pie_data = list(
+            all_questions.filter(question_id=question['question']).values('response').annotate(n=Count('response')))
+        line_data = list(all_questions.filter(question_id=question['question']).values('response', 'question').order_by(
+            'answer_date').annotate(
+            day=Cast(ExtractDay('answer_date'), CharField()),
+            month=Cast(ExtractMonth('answer_date'), CharField()),
+            year=Cast(ExtractYear('answer_date'), CharField()),
+            date=Concat('day', Value('/'), 'month', Value('/'), 'year', output_field=CharField())).values('response',
+                                                                                                          'date'))
+        list_of_questions[question['question']] = {
+            'pie_data': pie_data,
+            'line_data': line_data
+        }
     context = {
+        'questions': questions,
         'list_of_questions': list_of_questions,
         'patient': Patient.objects.get(identifier=patient_id)
     }
