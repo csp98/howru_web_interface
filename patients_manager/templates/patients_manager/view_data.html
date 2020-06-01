@@ -169,8 +169,12 @@
                             return responses[value];
                         },
                     },
-                }]
-            }
+                }],
+            },
+            animation: {
+                easing: 'easeOutSine',
+                duration: 1500,
+            },
         }
     });
 
@@ -193,7 +197,11 @@
             }]
         },
         options: {
-            responsive: true
+            responsive: true,
+            animation: {
+                easing: 'easeOutSine',
+                duration: 1500,
+            },
         },
     });
 {% endfor %}
