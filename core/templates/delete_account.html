@@ -1,0 +1,40 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Delete account {% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+    <div class="fade-in">
+        <div class="col-md-8" style="margin: 0 auto;float: none;margin-bottom: 10px;">
+            <div class="card">
+                <div class="card-header">
+                    <strong>Are you sure you want to delete your account ?</strong>
+                    <br>
+                    Your created questions will also be deleted.
+                </div>
+                <div class="card-body">
+                    <form action="{{request.path}}" class="form-horizontal"
+                          enctype="multipart/form-data"
+                          method="post">
+                        {% csrf_token %}
+                        <div class="text-center">
+                            <button class="btn btn-sm btn-danger" name="login" type="submit">Confirm</button>
+                            <a href="/">
+                                <button class="btn btn-sm btn-primary" type="button"> Back</button>
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% block javascripts %}
+<!-- Specific Page JS goes HERE  -->
+{% endblock javascripts %}
+
+{% endblock content %}
+

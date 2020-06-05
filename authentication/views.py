@@ -73,3 +73,15 @@ def change_password(request):
         'form': form,
         'success': success
     })
+
+@login_required(login_url="/login/")
+def delete_account(request):
+    """
+    Deletes a doctor from the system
+    """
+    if request.method == "POST":
+        request.user.doctor.delete()
+        request.user.delete()
+        return redirect('/')
+    context = {}
+    return render(request, 'delete_account.html', context)
