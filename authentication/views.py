@@ -8,6 +8,7 @@ from django.contrib.auth import authenticate, login, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm
 from django.shortcuts import render, redirect
+from howru_models.models import Patient
 
 from .forms import LoginForm, SignUpForm
 
@@ -36,6 +37,12 @@ def register_user(request):
     if request.method == "POST":
         form = SignUpForm(request.POST)
         if form.is_valid():
+            form.save()
+            # If the doctor is an analyst, assign him/her all the patients in the system
+            analyst = form.cleaned_data['is_analyst']
+            form.instance.doctor.is_analyst = analyst
+            if analyst:
+                form.instance.doctor.patient_set.set(Patient.objects.all())
             form.save()
             username = form.cleaned_data.get("username")
             raw_password = form.cleaned_data.get("password1")

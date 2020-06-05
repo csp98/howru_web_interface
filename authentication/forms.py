@@ -46,7 +46,10 @@ class SignUpForm(UserCreationForm):
                 "class": "form-control"
             }
         ))
+    data_analyst = forms.CharField()
 
+    def clean(self):
+        self.cleaned_data['is_analyst']  = self.cleaned_data['data_analyst'] == "yes"
     class Meta:
         model = User
         fields = ('username', 'password1', 'password2')
