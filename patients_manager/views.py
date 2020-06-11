@@ -93,6 +93,8 @@ def unassign(request, patient_id):
     context = {"patient": patient}
     if request.method == "POST":
         request.user.doctor.patient_set.remove(patient)
+        # Delete pending questions
+        pending = PendingQuestion.objects.filter(patient=patient, doctor=request.user.doctor).delete()
         request.session['message'] = f'Patient {patient} has been successfully deleted'
         page = request.session.pop('patients_page', 1)
         return redirect(f'/patients_manager?page={page}')
@@ -218,8 +220,12 @@ def create_csv(patients, file_path, start_date, end_date):
         for patient in patients:
             for answered_question in patient.answeredquestion_set.filter(answer_date__lte=end_date,
                                                                          answer_date__gte=start_date):
-                writer.writerow(
-                    [patient, answered_question.question, answered_question.response, answered_question.answer_date])
+                writer.writerow([
+                    patient,
+                    answered_question.question,
+                    answered_question.response,
+                    answered_question.answer_date.strftime('%Y-%m-%d %H:%M:%S')
+                ])
 
 
 def patients_to_csv(patients, doctor, start_date, end_date):

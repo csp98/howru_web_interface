@@ -76,10 +76,10 @@ def public_questions(request):
     """
     if 'search' in request.GET:
         term = request.GET['search']
-        all_questions = request.user.doctor.assigned_questions.filter(text__icontains=term, public=True).order_by(
+        all_questions = Question.objects.filter(text__icontains=term, public=True).order_by(
             'text')
     else:
-        all_questions = request.user.doctor.assigned_questions.filter(public=True).order_by('text')
+        all_questions = Question.objects.filter(public=True).order_by('text')
     page = request.GET.get('page', 1)
     paginator = Paginator(all_questions, settings.PAGE_SIZE)
     try:
