@@ -5,7 +5,7 @@ from questions_manager.models import AnsweredQuestion, PendingQuestion, Question
 from django_better_admin_arrayfield.admin.mixins import DynamicArrayMixin
 
 class QuestionAdmin(admin.ModelAdmin, DynamicArrayMixin):
-    pass
+    list_display = ('text', 'creator')
 
 class JournalEntryAdmin(admin.ModelAdmin):
     list_display = ('question', 'doctor', 'patient')

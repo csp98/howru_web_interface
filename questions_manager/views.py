@@ -20,7 +20,6 @@ def save_question(form, doctor):
     for r in form.cleaned_data.get('responses'):
         r.question = form.instance
         r.save()
-    #form.instance.response_set.set(form.cleaned_data.get('responses'))
     form.save()
 
 
@@ -142,6 +141,7 @@ def delete(request, question_id):
     question = Question.objects.get(id=question_id)
     context = {"question": question}
     if request.method == "POST":
+        question.delete()
         request.user.doctor.assigned_questions.remove(question)
         request.session['message'] = f'Question {question} has been successfully deleted'
         page = request.session.pop('my_questions_page', 1)
