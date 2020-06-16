@@ -80,21 +80,24 @@
 
 <script src="/static/assets/vendors/@coreui/coreui-chartjs/js/coreui-chartjs.bundle.js"></script>
 <script>
-
 {% for question, question_data in list_of_questions.items %}
     responses_json = {{question_data.pie_data | safe}};
     dates_json = {{question_data.line_data | safe}};
     // Variables creation
-    responses = [];
+    tmp_responses = [];
     values = [];
     data = [];
     responses = [];
     values = [];
     for (let r in responses_json) {
-        responses.push(responses_json[r]['response']);
+        tmp_responses.push(responses_json[r]);
         values.push(responses_json[r]['n']);
     }
-
+    tmp_responses.sort((a, b) => (a['response__order'] > b['response__order']) ? 1 : -1)
+    responses = [];
+    for (let r in tmp_responses) {
+        responses.push(tmp_responses[r]['response__text']);
+    }
     dates = [];
     for (let r in dates_json) {
         dates.push(dates_json[r]['date']);
@@ -104,7 +107,7 @@
     for (let r in dates_json) {
         data.push({
             x: dates.indexOf(dates_json[r]['date']),
-            y: responses.indexOf(dates_json[r]['response'])
+            y: responses.indexOf(dates_json[r]['response__text'])
         });
     }
 

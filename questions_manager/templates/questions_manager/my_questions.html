@@ -58,8 +58,8 @@
                             {{ question.text }}
                         </td>
                         <td style="text-align: center; vertical-align: middle;">
-                            {% for response in question.responses %}
-                            {{response}} <br>
+                            {% for response in question.response_set.all %}
+                            {{ response }} <br>
                             {% endfor %}
                         </td>
                         <td style="text-align: center; vertical-align: middle;">

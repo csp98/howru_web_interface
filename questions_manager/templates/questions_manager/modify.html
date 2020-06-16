@@ -44,7 +44,7 @@
                         <div class="form-group row">
                             <label class="col-md-3 col-form-label" for="responses_field">Possible responses</label>
                             <div class="col-md-9">
-                                <textarea class="form-control" id="responses_field" name="responses_field" required rows="9">{% for response in form.instance.responses %}{{ response }}&#10;{% endfor %}</textarea>
+                                <textarea class="form-control" id="responses_field" name="responses_field" required rows="9">{% for response in form.instance.response_set.all %}{{ response }}&#10;{% endfor %}</textarea>
                             </div>
                         </div>
                         <div class="form-group row">

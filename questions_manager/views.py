@@ -7,6 +7,22 @@ from django.shortcuts import render, redirect
 from .forms import QuestionForm
 from .models import Question, PendingQuestion
 
+def save_question(form, doctor):
+    """
+    Saves a question and its answers into DB from the related form.
+    form (QuestionForm)
+    doctor (Doctor)
+    """
+    form.instance.assigned_to_all = form.cleaned_data.get('assigned_to_all')
+    form.instance.creator = doctor
+    form.save()
+    # Link responses
+    for r in form.cleaned_data.get('responses'):
+        r.question = form.instance
+        r.save()
+    #form.instance.response_set.set(form.cleaned_data.get('responses'))
+    form.save()
+
 
 @login_required(login_url="/login/")
 def create(request):
@@ -18,10 +34,7 @@ def create(request):
         # Create a form instance and populate it with data from the request (binding):
         form = QuestionForm(request.POST)
         if form.is_valid():
-            form.instance.responses = form.cleaned_data.get('responses')
-            form.instance.assigned_to_all = form.cleaned_data.get('assigned_to_all')
-            form.instance.creator = request.user.doctor
-            form.save()
+            save_question(form, request.user.doctor)
             request.user.doctor.assigned_questions.add(form.instance)
             request.session['message'] = "Question has been successfully created"
             # If assigned to all, assign it to all doctor's patients
@@ -146,9 +159,8 @@ def modify(request, question_id):
     if request.method == "POST":
         form = QuestionForm(request.POST, instance=Question.objects.get(id=question_id))
         if form.is_valid():
-            form.instance.responses = form.cleaned_data.get('responses')
-            form.instance.assigned_to_all = form.cleaned_data.get('assigned_to_all')
-            form.save()
+            form.instance.response_set.all().delete()
+            save_question(form, request.user.doctor)
             request.session['message'] = f'Question {form.instance} has been successfully modified'
             # If assigned to all is checked, assign it to all patients
             if form.instance.assigned_to_all:

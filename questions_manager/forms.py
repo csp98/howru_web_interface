@@ -2,7 +2,7 @@ from django import forms
 from django.core.exceptions import ValidationError
 from django.forms import ModelForm
 
-from howru_models.models import Question
+from howru_models.models import Question, Response
 
 
 class QuestionForm(ModelForm):
@@ -23,9 +23,10 @@ class QuestionForm(ModelForm):
                 clean_response = response.strip()
                 if clean_response:
                     response_list.append(response)
-        if len(response_list) < 2:
-            raise ValidationError("You must specify at least two possible responses")
-        self.cleaned_data['responses'] = response_list
+        responses = list(dict.fromkeys(response_list))
+        if len(responses) < 2:
+            raise ValidationError("You must specify at least two different responses")
+        self.cleaned_data['responses'] = [Response(order=response_list.index(r), text=r) for r in responses]
         privacy = cd.get("privacy")
         self.cleaned_data['public'] = privacy == "Public"
         self.cleaned_data['assigned_to_all'] = self.cleaned_data['to_all'] == "yes"

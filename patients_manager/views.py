@@ -168,12 +168,11 @@ def view_data(request, patient_id):
     answered_set = Patient.objects.get(identifier=patient_id).answeredquestion_set
     if 'search' in request.GET:
         term = request.GET['search']
-        all_questions = answered_set.filter(question__text__icontains=term).values('question',
-                                                                                   'question__text').annotate(
-            n=Count('response')).order_by('question')
+        all_questions = answered_set.filter(question__text__icontains=term, doctor=request.user.doctor).values(
+            'question', 'question__text').annotate(n=Count('response')).order_by('question')
     else:
-        all_questions = answered_set.values('question', 'question__text').annotate(n=Count('response')).order_by(
-            'question')
+        all_questions = answered_set.filter(doctor=request.user.doctor).values('question', 'question__text').annotate(
+            n=Count('response')).order_by('question')
 
     page = request.GET.get('page', 1)
     paginator = Paginator(all_questions, settings.PAGE_SIZE)
@@ -186,14 +185,18 @@ def view_data(request, patient_id):
     list_of_questions = dict()
     for question in questions:
         pie_data = list(
-            all_questions.filter(question_id=question['question']).values('response').annotate(n=Count('response')))
+            all_questions.filter(question_id=question['question']).values('response__text',
+                                                                          'response__order').annotate(
+                n=Count('response')))
         line_data = list(all_questions.filter(question_id=question['question']).values('response', 'question').order_by(
             'answer_date').annotate(
             day=Cast(ExtractDay('answer_date'), CharField()),
             month=Cast(ExtractMonth('answer_date'), CharField()),
             year=Cast(ExtractYear('answer_date'), CharField()),
-            date=Concat('day', Value('/'), 'month', Value('/'), 'year', output_field=CharField())).values('response',
-                                                                                                          'date'))
+            date=Concat('day', Value('/'), 'month', Value('/'), 'year', output_field=CharField())).values(
+            'response__text',
+            'response__order',
+            'date'))
         list_of_questions[question['question']] = {
             'pie_data': pie_data,
             'line_data': line_data

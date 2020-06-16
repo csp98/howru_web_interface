@@ -1,5 +1,7 @@
 {% extends "layouts/base.html" %}
 {% load get_latest_answer_time from templatetags %}
+{% load get_assigned_questions from templatetags %}
+{% load get_number_of_assigned_questions from templatetags %}
 {% load paginate from pagination %}
 {% load get_url from get_search_url %}
 {% block title %} Patients Manager {% endblock %}
@@ -93,13 +95,13 @@
                             {{ patient.get__gender_display }}
                         </td>
                         <td style="text-align: center; vertical-align: middle;">
-                            {% if patient.pendingquestion_set.all %}
+                            {% if patient|get_assigned_questions:request.user.doctor %}
                             <a aria-controls="show_questions" aria-expanded="false" class="btn btn-pill btn-secondary"
                                data-toggle="collapse" href="#show_questions_{{patient}}">Show
-                                ({{patient.pendingquestion_set.all.count}})</a>
+                                ({{ patient|get_number_of_assigned_questions:request.user.doctor }})</a>
                             <div class="collapse" id="show_questions_{{patient}}">
                                 <div class="card card-body">
-                                    {% for question in patient.pendingquestion_set.all %}
+                                    {% for question in patient|get_assigned_questions:request.user.doctor %}
                                     {{ question.question }}
                                     <br>
                                     {% endfor %}
