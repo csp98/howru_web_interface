@@ -16,8 +16,11 @@ class PendingQuestionAdmin(JournalEntryAdmin):
 class AnsweredQuestionAdmin(JournalEntryAdmin):
     list_display = JournalEntryAdmin.list_display + ('response', 'answer_date' )
 
+class ResponseAdmin(admin.ModelAdmin):
+    list_display = ('question', 'text')
+
 admin.site.register(Question, QuestionAdmin)
 admin.site.register(PendingQuestion, PendingQuestionAdmin)
 admin.site.register(AnsweredQuestion, AnsweredQuestionAdmin)
-admin.site.register(Response)
+admin.site.register(Response, ResponseAdmin)
 
