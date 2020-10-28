@@ -2,4 +2,4 @@ from django.apps import AppConfig
 
 
 class QuestionsManagerConfig(AppConfig):
-    name = 'questions_manager'
+    name = 'web_interface.questions_manager'

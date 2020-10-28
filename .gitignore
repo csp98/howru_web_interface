@@ -127,4 +127,8 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+chatbot/config/bot_config.py
+chatbot/pics/
 core/key.py
+web_interface/staticfiles/
