@@ -2,4 +2,4 @@ from django.apps import AppConfig
 
 
 class PatientsManagerConfig(AppConfig):
-    name = 'patients_manager'
+    name = 'web_interface.patients_manager'

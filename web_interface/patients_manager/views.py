@@ -10,7 +10,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
 from howru_models.models import Patient, PendingQuestion
-from patients_manager.forms import AssignPatientForm, ExportForm
+from web_interface.patients_manager.forms import AssignPatientForm, ExportForm
 
 
 # Create your views here.

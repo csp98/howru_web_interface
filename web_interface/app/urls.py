@@ -5,7 +5,7 @@ Copyright (c) 2019 - present AppSeed.us
 """
 
 from django.urls import path
-from app import views
+from web_interface.app import views
 
 urlpatterns = [
     # Homepage

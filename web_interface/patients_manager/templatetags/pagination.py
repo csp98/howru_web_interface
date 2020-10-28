@@ -1,6 +1,6 @@
 from django import template
 
-from core import settings
+from web_interface.core import settings
 
 register = template.Library()
 
